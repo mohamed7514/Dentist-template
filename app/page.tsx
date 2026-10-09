@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
+import { SmileHero } from "@/components/smile-hero";
 import { Comparison } from "@/components/comparison";
 import { StartButton, TreatmentButton } from "@/components/actions";
 
 export default function Page() {
  return (
 <main id="main">
-<section className="hero" id="accueil"><div className="hero-copy"><p className="eyebrow"><span className="eyebrow-line"></span> VOTRE SOURIRE. VOTRE RYTHME.</p><h1>Le plaisir<br />de sourire,<br /><em>à nouveau.</em></h1><p className="hero-intro">Une dent à remplacer, une envie d’éclat ou une question. Découvrez vos possibilités, à votre rythme.</p><Link href="#soins" className="btn">Explorer mes possibilités <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></Link><StartButton type="button" className="hero-secondary">Je souhaite parler de mon projet <span>↗</span></StartButton><div className="hero-reassurance"><span>◇ Un accueil humain</span><span>○ Des réponses claires</span></div></div>
-<div className="hero-photo"><Image src="/assets/hero.png" alt="Portrait illustratif d’une femme souriante, dans des tons naturels" width={1122} height={1402} priority /><span className="photo-caption">LE SOURIRE QUI VOUS RESSEMBLE.</span><div className="hero-photo-note"><span className="note-symbol">✳</span><p>Une envie de changer.<br /><strong>Le droit de prendre son temps.</strong></p></div></div></section>
+<SmileHero />
 <div className="values wrap"><div><span>01</span><p><strong>Votre situation.</strong><br />Le point de départ de chaque échange.</p></div><div><span>02</span><p><strong>Vos questions.</strong><br />Le temps de comprendre vos possibilités.</p></div><div><span>03</span><p><strong>Votre décision.</strong><br />Une démarche à votre rythme.</p></div></div>
 <section className="services wrap" id="soins"><div className="section-heading"><div><p className="eyebrow">UNE ENVIE. PLUSIEURS POSSIBILITÉS.</p><h2>Qu’est-ce qui<br /><em>compte pour vous ?</em></h2></div><p>Choisissez ce qui vous ressemble.<br />Nous vous guidons pour la suite.</p></div>
 <div className="service-grid"><Link href="/implants/" className="service-card featured"><div className="service-top"><span>01 / RETROUVER</span><svg viewBox="0 0 80 80" fill="none" aria-hidden="true"><path d="M40 21c-12-10-25-2-23 14 1 8 5 28 11 28 6 0 4-17 12-17s6 17 12 17c6 0 10-20 11-28 2-16-11-24-23-14Z" stroke="currentColor" strokeWidth="1.5"/><path d="M34 23c4 3 8 4 13 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg></div><h3>Un sourire<br />plus complet.</h3><p>Une ou plusieurs dents manquantes ?<br />Comprendre les options de remplacement.</p><span className="service-link">Découvrir les implants <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></span></Link>
