@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { SiteProvider } from "@/components/site-provider";
 import { SiteHeader, SiteFooter } from "@/components/site-shell";
 import "./globals.css";
+import "./site-pages.css";
 
 export const metadata: Metadata = {
   title: { default: "Retrouvez le plaisir de sourire — Épure", template: "%s — Épure" },

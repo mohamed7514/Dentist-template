@@ -25,6 +25,10 @@ Next.js génère un export dans `out/` pour l’hébergement actuel. `npm start`
 
 - `app/page.tsx` : accueil.
 - `app/implants/page.tsx` : page implants, métadonnées et navigation Next.js.
+- `app/soins/`, `app/blanchiment/`, `app/alignement/` : catalogue et pages de services.
+- `app/clinique/` : présentation et espaces réservés à l’équipe et aux coordonnées.
+- `app/smile-preview/`, `app/photos-guidees/`, `app/rendez-vous/` : pages réservées aux fonctionnalités principales.
+- `components/reserved-feature.tsx`, `components/feature-page.tsx`, `app/site-pages.css` : gabarit partagé des espaces réservés et nouvelles pages.
 - `app/layout.tsx` : structure partagée et métadonnées.
 - `app/globals.css` : design blanc, anthracite et beige.
 - `components/` : navigation, comparaison, formulaires, photos et modales React.
@@ -37,7 +41,9 @@ Les pages sont des composants React avec de vraies routes Next.js. Le parcours u
 
 ## Parcours et limites
 
-Photos guidées importées ou prises avec la caméra, alternative sans photo, comparaison illustrative, trois questions, formulaire contrôlé, choix de créneau et récapitulatif téléchargeable. Les informations restent en mémoire pendant la visite et sont conservées lors de la navigation entre les deux pages, puis effacées au rechargement.
+Le gabarit actuel comporte neuf pages publiques reliées par les menus, cartes de soins et liens de parcours. Les actions principales conduisent aux pages réservées : photos guidées, SmilePreview et rendez-vous. La page rendez-vous réserve également le micro-questionnaire et les confirmations/rappels. Ces espaces n’effectuent aucune collecte, analyse ou réservation.
+
+Les composants du précédent parcours de démonstration sont conservés dans `components/` pour les itérations suivantes. Les comparateurs avant/après existants restent illustratifs. Le hero animé GSAP et sa navigation transparente sont conservés.
 
 Épure est une identité fictive. Le comparateur montre un exemple indépendant des photos du visiteur. Aucun moteur IA personnalisé, calendrier réel, stockage, notification SMS/email ou invitation à laisser un avis n’est connecté. Aucun rendez-vous réel n’est réservé.
 
@@ -45,9 +51,9 @@ La phase prévue repose sur un calendrier maître, une validation de la récepti
 
 ## Contrôles
 
-`npm run typecheck` et `npm run build` ont réussi. Depuis le dossier parent : `node tools/next-check.mjs`, avec l’export servi sur le port 3090 (`node scripts/preview.mjs --port 3090` depuis ce projet). Le contrôle couvre la navigation Next.js, les images, les états React, les photos, la validation, les créneaux, la reprise de session, les largeurs 1440/1024/768/390/320 et les erreurs JavaScript/hydratation.
+`npm run typecheck` et `npm run build` ont réussi. Depuis le dossier parent : `node tools/template-check.mjs`, avec l’export servi sur le port 3090 (`node scripts/preview.mjs --port 3090` depuis ce projet). Le contrôle couvre les neuf routes, les liens internes, les menus de soins, les navigations entre pages, les espaces réservés, les largeurs 1440/768/390/320 et les erreurs JavaScript/hydratation. `tools/next-check.mjs` conserve les contrôles historiques du précédent parcours de démonstration.
 
-Captures dans `../preview/next/`.
+Captures du gabarit dans `../preview/template/`.
 
 ## Visuels et contenu
 

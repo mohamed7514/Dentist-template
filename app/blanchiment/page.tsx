@@ -1,0 +1,10 @@
+import {ServicePage, type ServicePageContent} from "@/components/service-page";
+export const metadata={title:"Blanchiment dentaire",description:"Une envie d’éclat ? Préparez vos questions et votre première conversation avec Épure."};
+const content:ServicePageContent={
+ number:"02",name:"Blanchiment dentaire",eyebrow:"ILLUMINER, À VOTRE RYTHME.",title:"Un peu plus d’éclat.",accent:"Toujours vous.",intro:"Vous aimeriez un sourire plus lumineux, tout en gardant un aspect naturel ? Commençons par ce que vous avez en tête.",image:"portrait",
+ wishes:["Je souhaite parler de la couleur de mes dents.","J’aimerais garder un résultat d’apparence naturelle.","Je veux comprendre mes options avant de choisir."],
+ conversation:"Vos attentes peuvent être très précises, ou encore un peu floues. Parlez de ce que vous aimeriez changer, de vos hésitations et des questions que vous souhaitez poser.",
+ questions:[{title:"Votre envie d’éclat.",text:"Ce que vous aimez dans votre sourire et ce que vous aimeriez faire évoluer."},{title:"Vos questions.",text:"Le confort, la teinte souhaitée, les étapes et le budget : préparez les sujets qui comptent pour vous."},{title:"La suite, ensemble.",text:"L’évaluation sera l’occasion de discuter des possibilités adaptées à votre situation."}],
+ faqs:[{q:"Dois-je déjà savoir ce que je souhaite ?",a:"Non. Vous pouvez simplement expliquer ce qui vous préoccupe dans la couleur de votre sourire."},{q:"Puis-je parler d’un résultat naturel ?",a:"Oui. Vos préférences font partie de la conversation. Une image de référence peut aider à expliquer votre envie, sans garantir un résultat."},{q:"Où puis-je connaître le prix et les étapes ?",a:"Ces questions seront abordées avec le cabinet selon votre situation. Aucun tarif de traitement n’est fixé dans ce site modèle."},{q:"Puis-je commencer sans envoyer de photos ?",a:"Oui. Les photos guidées seront facultatives. Vous pourrez commencer par un échange."}]
+};
+export default function Page(){return <ServicePage content={content}/>}
