@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SmileHero } from "@/components/smile-hero";
 import { FeatureSpaces } from "@/components/reserved-feature";
 import { Comparison } from "@/components/comparison";
+import { ReviewsSection, LocationSection } from "@/components/reviews-location";
 
 
 export default function Page() {
@@ -18,6 +19,7 @@ export default function Page() {
 <section className="path-section" id="parcours"><div className="wrap"><div className="section-heading"><div><p className="eyebrow">LE PREMIER PAS PEUT ÊTRE SIMPLE.</p><h2>De votre envie<br /><em>à notre première conversation.</em></h2></div><Link href="/rendez-vous/" className="text-link">Commencer mon parcours <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></Link></div><div className="path-grid"><article><span className="step-number">01</span><h3>Montrez-nous,<br />si vous le souhaitez.</h3><p>Deux à trois photos guidées depuis votre téléphone. Vous pouvez aussi continuer sans photo.</p><span className="path-tag">À votre choix</span></article><article><span className="step-number">02</span><h3>Parlez-nous<br />de votre projet.</h3><p>Votre besoin, votre échéance, vos questions de budget. Quelques clics pour préparer l’échange.</p><span className="path-tag">Trois questions</span></article><article><span className="step-number">03</span><h3>Proposez<br />un premier rendez-vous.</h3><p>Choisissez un créneau souhaité. La réception doit ensuite le vérifier et le confirmer.</p><span className="path-tag">Sur confirmation</span></article></div></div></section>
 <section className="preview-section wrap" id="apercu"><div className="preview-copy"><p className="eyebrow">SMILEPREVIEW IA™</p><h2>Une possibilité<br />à explorer.<br /><em>Une conversation à ouvrir.</em></h2><p>Un aperçu visuel peut aider à mettre des mots sur vos attentes. Explorez cet exemple en déplaçant le curseur.</p><Link href="/smile-preview/" className="btn">Découvrir SmilePreview <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></Link><p className="medical-note">Exemple fictif, sans analyse de vos photos. Un aperçu ne constitue ni un diagnostic ni une prédiction du résultat. Les possibilités seront évaluées avec le dentiste.</p></div><div className="preview-visual"><Comparison id="home-range" /><div className="comparison-caption"><span>FAITES GLISSER LE CURSEUR</span><span>Illustration · aucun cas clinique réel</span></div></div></section>
 <FeatureSpaces/>
+<ReviewsSection/>
 <section className="faq-section wrap" id="questions"><div className="faq-intro"><p className="eyebrow">VOS QUESTIONS ONT LEUR PLACE.</p><h2>Et si vous<br /><em>hésitiez encore ?</em></h2><p>Vous n’avez pas à tout savoir.<br />Commençons par ce qui vous préoccupe.</p><Link href="/rendez-vous/" className="text-link">Je souhaite en parler <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></Link></div><div className="faq-list">
 <details><summary>Est-ce que je dois déjà savoir quel soin choisir ?<span>+</span></summary><p>Vous pouvez simplement décrire ce qui vous gêne ou ce que vous aimeriez comprendre. L’évaluation permettra de discuter des options avec le dentiste.</p></details>
 <details><summary>Les photos sont-elles obligatoires ?<span>+</span></summary><p>Non. Elles peuvent donner du contexte à votre demande. Vous pouvez continuer sans photo et vous pouvez retirer celles que vous ajoutez.</p></details>
@@ -25,6 +27,8 @@ export default function Page() {
 <details><summary>Et si je ne connais pas mon budget ?<span>+</span></summary><p>Choisissez « J’ai besoin d’un devis ». Cela ne vous empêche pas de poursuivre. Les coûts de l’évaluation et du traitement devront être précisés par le cabinet avant votre engagement.</p></details>
 <details><summary>Mon rendez-vous est-il confirmé immédiatement ?<span>+</span></summary><p>Vous proposez un créneau. La réception doit vérifier le planning, puis confirmer le rendez-vous ou proposer une autre heure. Les créneaux de ce site modèle sont illustratifs.</p></details>
 <details><summary>Comment serai-je prévenu et rappelé ?<span>+</span></summary><p>Le parcours prévoit une confirmation après validation par la réception, puis des rappels selon votre préférence de contact. Aucun SMS ni email réel n’est envoyé depuis cette démonstration.</p></details>
-</div></section></main>
+</div></section>
+<LocationSection/>
+</main>
  );
 }
