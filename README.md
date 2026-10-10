@@ -57,4 +57,6 @@ Captures du gabarit dans `../preview/template/`.
 
 ## Visuels et contenu
 
+Le bouton « Urgence dentaire » ouvre un panneau accessible, disponible sur toutes les pages. Sur mobile, il partage la barre fixe avec « Rendez-vous ». Configurer les coordonnées confirmées dans `lib/emergency-contact.ts` ; elles sont volontairement vides pour ne pas appeler le cabinet dont l’adresse sert d’exemple. Aucun formulaire ni rappel automatique n’est ajouté. Le panneau propose les repères 811/911 et ne réalise aucun diagnostic. Vérification ciblée : `node tools/emergency-check.mjs` depuis le dossier parent.
+
 Les images précédentes sont réutilisées sans génération supplémentaire. Provenance et prompts : `visual-prompts.txt` et `comparison-prompt.txt`. Le lien de l’Association dentaire canadienne est conservé sur la page implants.

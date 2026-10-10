@@ -6,6 +6,7 @@ import {Arrow} from "./icons";
 import {PrivacyButton} from "./actions";
 import "./site-header.css";
 import {services} from "@/lib/services";
+import {EmergencyAccess} from "./emergency-access";
 export function Brand(){return <Link className="brand" href="/" aria-label="Épure, accueil">épure<span>.</span><small>CLINIQUE DENTAIRE</small></Link>}
 export function SiteHeader(){
  const [menu,setMenu]=useState(false);
@@ -33,6 +34,6 @@ export function SiteFooter(){
  return <>
  <section className="closing wrap"><p className="eyebrow">ET SI ON COMMENÇAIT PAR VOUS ?</p><h2>Un premier pas.<br/><em>À votre rythme.</em></h2><p>Vous n’avez pas besoin d’avoir toutes les réponses<br className="desktop-only"/> pour commencer à poser vos questions.</p><Link href="/rendez-vous/" className="btn light">Préparer ma première visite <Arrow/></Link><span className="closing-note">Aucune décision de traitement à prendre aujourd’hui.</span></section>
  <footer className="footer wrap"><div className="footer-top"><Brand/><p>Votre sourire.<br/>Votre histoire. Votre rythme.</p><div><Link href="/soins/">Tous les soins</Link>{services.map(service=><Link href={service.href} key={service.href}>{service.name}</Link>)}</div><div><Link href="/clinique/">La clinique</Link><Link href="/smile-preview/">SmilePreview</Link><Link href="/photos-guidees/">Photos guidées</Link><Link href="/rendez-vous/">Rendez-vous</Link><PrivacyButton/></div></div><div className="footer-bottom"><span>© 2026 Épure · Identité de démonstration</span><span>Clinique fictive et images illustratives. Demandes simulées.</span><span>Une création Karwisoft Marketing</span></div></footer>
- <div className="mobile-cta"><span>Votre prochain pas ?</span><Link href="/rendez-vous/">Préparer ma visite <Arrow/></Link></div>
+ <EmergencyAccess/>
  </>;
 }
