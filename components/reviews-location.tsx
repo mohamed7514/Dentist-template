@@ -5,7 +5,7 @@ import "./reviews-location.css";
 function Pin(){return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z" stroke="currentColor" strokeWidth="1.4"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.4"/></svg>}
 
 export function ReviewsSection(){return <section className="reviews-section" id="avis" aria-labelledby="reviews-title"><div className="wrap">
-  <div className="reviews-heading"><div><p className="eyebrow">LA CONFIANCE SE RACONTE.</p><h2 id="reviews-title">Derrière chaque sourire,<br/><em>une expérience.</em></h2></div><div className="reviews-disclosure"><span className="example-label">AVIS DE DÉMONSTRATION</span><p>Des exemples fictifs pour présenter cette section.<br/>Les avis réels du cabinet prendront leur place ici.</p></div></div>
+  <div className="reviews-heading"><div><p className="eyebrow">LA CONFIANCE SE RACONTE.</p><h2 id="reviews-title">Derrière chaque sourire,<br/><em>une expérience.</em></h2></div><div className="reviews-disclosure"><span className="example-label">AVIS DE DÉMONSTRATION</span><p>Des exemples fictifs pour présenter cette section.<br/> Les avis réels du cabinet prendront leur place ici.</p></div></div>
   <div className="reviews-grid">{demoReviews.map(review=><article className="review-card" key={review.initials}>
     <div className="review-card-top"><span>{review.context}</span><span className="review-stars" aria-hidden="true">★★★★★</span></div>
     <blockquote><span className="review-quote-mark" aria-hidden="true">“</span><p>{review.quote}</p></blockquote>
