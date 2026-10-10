@@ -16,16 +16,17 @@ export function FeatureSymbol({kind}:{kind:FeatureKind}) {
 
 export function ReservedFeature({kind,large=false}:{kind:FeatureKind;large?:boolean}) {
  const feature=features[kind];
+ if(kind==="photos")return <Link className="photo-feature-card" href={feature.href}><div><span>PHOTOS GUIDÉES</span><span>Disponible sur votre appareil</span></div><FeatureSymbol kind="photos"/><h3>Votre sourire.<br/>Un angle à la fois.</h3><p>Caméra ou galerie · deux à trois photos</p><span>Commencer mes photos <Arrow/></span></Link>;
  return <div className={`reserved-feature${large?" reserved-feature-large":""}`} data-reserved={kind}>
   <div className="reserved-feature-label"><span className="reserved-dot"/> ESPACE RÉSERVÉ <span>Fonctionnalité principale</span></div>
-  <div className="reserved-feature-center"><FeatureSymbol kind={kind}/><h3>{feature.reserved}</h3><p>{kind==="preview"?"Aperçu indicatif · avant / après":kind==="photos"?"Sourire de face · vue rapprochée · profil":"Créneau souhaité · coordonnées · confirmation"}</p></div>
+  <div className="reserved-feature-center"><FeatureSymbol kind={kind}/><h3>{feature.reserved}</h3><p>{kind==="preview"?"Aperçu indicatif · avant / après":"Créneau souhaité · coordonnées · confirmation"}</p></div>
   <div className="reserved-feature-bottom"><span>{feature.title}</span><span>Intégration à venir</span></div>
  </div>;
 }
 
 export function FeatureSpaces({id="fonctionnalites"}:{id?:string}) {
  return <section className="feature-spaces wrap" id={id}>
-  <div className="section-heading"><div><p className="eyebrow">VOTRE PARCOURS DIGITAL.</p><h2>La suite,<br/><em>en toute simplicité.</em></h2></div><p>Des espaces pensés pour vous guider.<br/>Les fonctionnalités seront intégrées ici.</p></div>
-  <div className="feature-spaces-grid">{(["preview","photos","booking"] as FeatureKind[]).map(kind=><article key={kind}><ReservedFeature kind={kind}/><h3>{features[kind].title}</h3><p>{features[kind].description}</p><Link href={features[kind].href} className="text-link">Découvrir cet espace <Arrow/></Link></article>)}</div>
+  <div className="section-heading"><div><p className="eyebrow">VOTRE PARCOURS DIGITAL.</p><h2>La suite,<br/><em>en toute simplicité.</em></h2></div><p>Des espaces pensés pour vous guider.<br/>Commencez par vos photos, si vous le souhaitez.</p></div>
+  <div className="feature-spaces-grid">{(["preview","photos","booking"] as FeatureKind[]).map(kind=><article key={kind}><ReservedFeature kind={kind}/><h3>{features[kind].title}</h3><p>{features[kind].description}</p><Link href={features[kind].href} className="text-link">{kind==="photos"?"Prendre mes photos":"Découvrir cet espace"} <Arrow/></Link></article>)}</div>
  </section>;
 }

@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { SiteProvider } from "@/components/site-provider";
 import { SiteHeader, SiteFooter } from "@/components/site-shell";
+import { PhotoSessionProvider } from "@/components/photo-session";
 import "./globals.css";
 import "./site-pages.css";
+import "@/components/photo-capture.css";
 
 export const metadata: Metadata = {
   title: { default: "Retrouvez le plaisir de sourire — Épure", template: "%s — Épure" },
@@ -19,12 +21,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
       </head>
       <body>
-        <SiteProvider>
+        <PhotoSessionProvider><SiteProvider>
           <a className="skip" href="#main">Aller au contenu</a>
           <SiteHeader />
           {children}
           <SiteFooter />
-        </SiteProvider>
+        </SiteProvider></PhotoSessionProvider>
       </body>
     </html>
   );

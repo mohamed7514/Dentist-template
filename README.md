@@ -27,7 +27,9 @@ Next.js génère un export dans `out/` pour l’hébergement actuel. `npm start`
 - `app/implants/page.tsx` : page implants, métadonnées et navigation Next.js.
 - `app/soins/`, `app/blanchiment/`, `app/alignement/` : catalogue et pages de services.
 - `app/clinique/` : présentation et espaces réservés à l’équipe et aux coordonnées.
-- `app/smile-preview/`, `app/photos-guidees/`, `app/rendez-vous/` : pages réservées aux fonctionnalités principales.
+- `app/photos-guidees/` : capture guidée active, caméra ou galerie, deux photos conseillées et profil facultatif, récapitulatif et suppression.
+- `app/smile-preview/`, `app/rendez-vous/` : espaces réservés aux prochaines fonctionnalités.
+- `components/photo-capture.tsx`, `components/photo-session.tsx` : préparation locale des images et conservation en mémoire pendant la navigation Next.js. Les fichiers sont redimensionnés à 1600 px maximum et réencodés en JPEG sans envoi réseau. Formats photos lisibles par le navigateur, 12 Mo maximum ; HEIC/HEIF affichent un message de remplacement si le navigateur ne peut pas les lire. La caméra est arrêtée à la sortie, au changement d’angle ou quand la page est masquée. Les photos disparaissent au rechargement. La page rendez-vous montre un récapitulatif local ; elle ne transmet aucun fichier.
 - `components/reserved-feature.tsx`, `components/feature-page.tsx`, `app/site-pages.css` : gabarit partagé des espaces réservés et nouvelles pages.
 - `app/layout.tsx` : structure partagée et métadonnées.
 - `app/globals.css` : design blanc, anthracite et beige.

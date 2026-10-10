@@ -1,3 +1,4 @@
-import {FeaturePage} from "@/components/feature-page";
-export const metadata={title:"Photos guidées · Espace réservé"};
-export default function Page(){return <FeaturePage kind="photos"/>}
+import Link from "next/link";
+import {PhotoCapture} from "@/components/photo-capture";
+export const metadata={title:"Vos photos guidées",description:"Préparez deux à trois photos de votre sourire avec un guide à chaque étape. Photos facultatives, conservées uniquement sur votre appareil dans cette démonstration."};
+export default function Page(){return <main id="main" className="photo-page"><section className="photo-page-intro wrap"><Link className="breadcrumb" href="/">← Accueil / Photos guidées</Link><div><div><p className="eyebrow">MONTRER, SI VOUS LE SOUHAITEZ.</p><h1>Votre sourire.<br/><em>Un guide à chaque étape.</em></h1></div><p>Deux photos pour préparer la conversation.<br/>Un troisième angle si vous le souhaitez.<br/><span>Vous pouvez aussi continuer sans photo.</span></p></div></section><PhotoCapture/></main>}
