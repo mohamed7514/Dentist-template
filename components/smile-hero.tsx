@@ -89,7 +89,7 @@ export function SmileHero() {
         .to(captions[1], { opacity: 0, y: -12, duration: 0.08 }, 0.68)
         .fromTo(captions[2], { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.10 }, 0.76);
 
-      // The frame has a fixed aspect ratio; fonts are the only late layout change.
+      // Refresh pin measurements once the heading fonts have settled.
       let active = true;
       document.fonts.ready.then(() => { if (active) ScrollTrigger.refresh(); });
       return () => { active = false; };
@@ -107,8 +107,8 @@ export function SmileHero() {
 
         <div className="smile-frame" role="img" aria-label="Animation illustrative : au fil du défilement, un sourire avec des dents tachées et manquantes évolue vers un sourire complet et naturel.">
           <div className="smile-photograph" aria-hidden="true">
-            <Image className="smile-final" src="/assets/smile-final.webp" alt="" width={1536} height={1024} priority sizes="(max-width: 700px) 100vw, 85vw" />
-            <Image className="smile-before" src="/assets/smile-before.webp" alt="" width={1536} height={1024} priority sizes="(max-width: 700px) 100vw, 85vw" />
+            <Image className="smile-final" src="/assets/smile-final.webp" alt="" width={1536} height={1024} priority sizes="100vw" />
+            <Image className="smile-before" src="/assets/smile-before.webp" alt="" width={1536} height={1024} priority sizes="100vw" />
             <svg className="smile-tooth-patches" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
               <defs>
                 <filter id="smile-soft-mask"><feGaussianBlur stdDeviation="4" /></filter>
