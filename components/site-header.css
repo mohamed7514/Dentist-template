@@ -1,0 +1,13 @@
+.header.header-overlay{position:fixed;inset:0 0 auto;width:100%;transition:background .25s,color .25s,border-color .25s}
+.header.header-on-hero{background:transparent;color:#fffaf3;border-color:transparent;backdrop-filter:none}
+.header-on-hero .brand>span{color:#d7bea0}
+.header-on-hero .model-label{color:#e2d6c8}
+.header-on-hero .desktop-nav a:after{background:#fffaf3}
+.header-on-hero .header-end .btn{background:transparent;color:#fffaf3;border-color:rgba(255,250,243,.45)}
+.header-on-hero .header-end .btn:hover{background:rgba(255,250,243,.12)}
+.header-on-hero .menu-button span{background:#fffaf3}
+@media(max-width:700px){
+ .mobile-menu.mobile-menu-on-hero{background:rgba(36,27,22,.97);color:#fffaf3;border-color:rgba(255,250,243,.16);backdrop-filter:blur(16px)}
+ .mobile-menu-on-hero a,.mobile-menu-on-hero button{border-color:rgba(255,250,243,.16)}
+}
+@media(prefers-reduced-motion:reduce){.header.header-overlay{transition:none}}

@@ -56,3 +56,5 @@
 @media(max-width:360px){.smile-heading{left:22px;right:18px;top:25px}.smile-heading h1{font-size:34px}.smile-eyebrow{font-size:6px}.smile-story{left:22px;right:22px;bottom:79px}.smile-captions{min-height:88px}.smile-caption h2{font-size:21px}.smile-caption p{font-size:9px}.smile-scroll-cue{bottom:272px;right:22px}.smile-photograph{inset:18% 0 24%}}
 @media(max-height:760px) and (min-width:701px){.smile-scene{min-height:570px}.smile-heading{top:35px}.smile-heading h1{font-size:62px}.smile-eyebrow{margin-bottom:16px}.smile-story{bottom:20px;row-gap:15px}.smile-caption h2{font-size:26px}.smile-captions{min-height:74px}.smile-scroll-cue{bottom:156px}}
 @media(prefers-reduced-motion:reduce){.smile-before{opacity:0}.smile-caption:first-child{opacity:0}.smile-caption:last-child{opacity:1}.smile-scroll-cue{display:none}.smile-step{transition:none}}
+.smile-hero .smile-scene{height:100svh}
+.smile-hero .smile-heading,.smile-hero .smile-frame-top{top:calc(var(--hero-header) + 30px)}

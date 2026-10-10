@@ -1,15 +1,29 @@
 "use client";
-import {useState} from "react";
+import {useEffect,useState} from "react";
+import {usePathname} from "next/navigation";
 import Link from "next/link";
 import {Arrow} from "./icons";
 import {StartButton,PrivacyButton} from "./actions";
+import "./site-header.css";
 export function Brand(){return <Link className="brand" href="/" aria-label="Épure, accueil">épure<span>.</span><small>CLINIQUE DENTAIRE</small></Link>}
 export function SiteHeader(){
  const [menu,setMenu]=useState(false);
+ const home=usePathname()==="/";
+ const [overHero,setOverHero]=useState(true);
+ useEffect(()=>{
+  setMenu(false);
+  if(!home) return;
+  setOverHero(true);
+  const hero=document.querySelector("#accueil");
+  if(!hero) return;
+  const observer=new IntersectionObserver(([entry])=>setOverHero(entry.isIntersecting),{rootMargin:"-92px 0px 0px 0px"});
+  observer.observe(hero);
+  return ()=>observer.disconnect();
+ },[home]);
  return <>
- <header className="header"><Brand/><nav className="desktop-nav" aria-label="Navigation principale"><Link href="/#soins">Nos soins</Link><Link href="/#approche">L’approche</Link><Link href="/#questions">Vos questions</Link></nav>
+ <header className={`header${home?" header-overlay":""}${home&&overHero?" header-on-hero":""}`}><Brand/><nav className="desktop-nav" aria-label="Navigation principale"><Link href="/#soins">Nos soins</Link><Link href="/#approche">L’approche</Link><Link href="/#questions">Vos questions</Link></nav>
  <div className="header-end"><span className="model-label">Clinique modèle</span><StartButton className="btn small">Mon évaluation <Arrow/></StartButton><button className="menu-button" type="button" aria-label={menu?"Fermer le menu":"Ouvrir le menu"} aria-expanded={menu} aria-controls="mobile-menu" onClick={()=>setMenu(!menu)}><span/><span/></button></div></header>
- <nav className="mobile-menu" id="mobile-menu" aria-label="Navigation mobile" hidden={!menu} onClick={()=>setMenu(false)} onKeyDown={event=>{if(event.key==="Escape")setMenu(false)}}>
+ <nav className={`mobile-menu${home&&overHero?" mobile-menu-on-hero":""}`} id="mobile-menu" aria-label="Navigation mobile" hidden={!menu} onClick={()=>setMenu(false)} onKeyDown={event=>{if(event.key==="Escape")setMenu(false)}}>
  <Link href="/#soins">Nos soins</Link><Link href="/implants/">Les implants</Link><Link href="/#approche">Notre approche</Link><Link href="/#questions">Vos questions</Link><StartButton>Préparer mon évaluation <Arrow/></StartButton></nav>
  </>;
 }

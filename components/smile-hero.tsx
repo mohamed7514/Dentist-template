@@ -64,7 +64,7 @@ export function SmileHero() {
           id: "smile-hero",
           trigger: section,
           pin: scene,
-          start: () => `top top+=${document.querySelector(".header")?.getBoundingClientRect().height ?? 0}`,
+          start: "top top",
           end: () => `+=${Math.max(1100, Math.round(window.innerHeight * 1.8))}`,
           scrub: 0.65,
           anticipatePin: 1,
