@@ -6,6 +6,7 @@ import { BookingSessionProvider } from "@/components/booking-session";
 import "./globals.css";
 import "./site-pages.css";
 import "@/components/photo-capture.css";
+import "./editorial-layout.css";
 
 export const metadata: Metadata = {
   title: { default: "Retrouvez le plaisir de sourire — Épure", template: "%s — Épure" },

@@ -26,8 +26,9 @@ export function ReservedFeature({kind,large=false}:{kind:FeatureKind;large?:bool
 }
 
 export function FeatureSpaces({id="fonctionnalites"}:{id?:string}) {
+ const descriptions={preview:"Explorer un exemple illustratif",photos:"Préparer vos photos, si vous le souhaitez",booking:"Votre besoin, vos préférences, votre visite"};
  return <section className="feature-spaces wrap" id={id}>
-  <div className="section-heading"><div><p className="eyebrow">VOTRE PARCOURS DIGITAL.</p><h2>La suite,<br/><em>en toute simplicité.</em></h2></div><p>Des espaces pensés pour vous guider.<br/>Commencez par vos photos, si vous le souhaitez.</p></div>
-  <div className="feature-spaces-grid">{(["preview","photos","booking"] as FeatureKind[]).map(kind=><article key={kind}><ReservedFeature kind={kind}/><h3>{features[kind].title}</h3><p>{features[kind].description}</p><Link href={features[kind].href} className="text-link">{kind==="photos"?"Prendre mes photos":"Découvrir cet espace"} <Arrow/></Link></article>)}</div>
+  <div className="section-heading"><div><p className="eyebrow">À VOTRE RYTHME.</p><h2>Préparez <em>votre visite.</em></h2></div></div>
+  <div className="feature-links">{(["photos","preview","booking"] as FeatureKind[]).map(kind=><Link className="feature-shortcut" key={kind} href={features[kind].href}><FeatureSymbol kind={kind}/><div><h3>{features[kind].title}</h3><p>{descriptions[kind]}</p></div><Arrow/></Link>)}</div>
  </section>;
 }
