@@ -15,6 +15,11 @@ export function EmergencyAccess(){
   const dialog=useRef<HTMLDialogElement>(null);
   const [open,setOpen]=useState(false);
   const pathname=usePathname();
+  useEffect(()=>{
+    const handle=()=>{if(dialog.current&&!dialog.current.open){dialog.current.showModal();setOpen(true)}};
+    window.addEventListener("epure:open-emergency",handle);
+    return ()=>window.removeEventListener("epure:open-emergency",handle);
+  },[]);
   useEffect(()=>{dialog.current?.close()},[pathname]);
   useEffect(()=>{
     if(!open)return;

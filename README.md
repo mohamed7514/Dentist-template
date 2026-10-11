@@ -43,7 +43,9 @@ Les pages sont des composants React avec de vraies routes Next.js. Le parcours u
 
 ## Parcours et limites
 
-Le gabarit actuel comporte neuf pages publiques reliées par les menus, cartes de soins et liens de parcours. Les actions principales conduisent aux pages réservées : photos guidées, SmilePreview et rendez-vous. La page rendez-vous réserve également le micro-questionnaire et les confirmations/rappels. Ces espaces n’effectuent aucune collecte, analyse ou réservation.
+Le site comporte neuf pages publiques. `/photos-guidees/` permet la capture locale et `/rendez-vous/` propose un parcours interactif : urgence ou consultation, besoin/échéance/budget facultatif, date et période souhaitées, coordonnées, récapitulatif modifiable et fin de simulation. Les disponibilités ne sont pas présentées comme réelles. Le formulaire ne transmet rien et n’effectue aucune réservation. Les confirmations et rappels restent à connecter ; SmilePreview reste illustratif.
+
+`BookingSessionProvider` garde les réponses en mémoire pendant la navigation interne, notamment vers les photos. Aucun stockage persistant n’est utilisé. Un rechargement efface réponses et photos. Le parcours accepte une consultation sans photos, vérifie les champs et le format du téléphone canadien, distingue la préférence de date d’un rendez-vous confirmé et ouvre directement le panneau existant pour une urgence. Utiliser des coordonnées fictives pour les essais.
 
 Les composants du précédent parcours de démonstration sont conservés dans `components/` pour les itérations suivantes. Les comparateurs avant/après existants restent illustratifs. Le hero animé GSAP et sa navigation transparente sont conservés.
 
@@ -53,7 +55,7 @@ La phase prévue repose sur un calendrier maître, une validation de la récepti
 
 ## Contrôles
 
-`npm run typecheck` et `npm run build` ont réussi. Depuis le dossier parent : `node tools/template-check.mjs`, avec l’export servi sur le port 3090 (`node scripts/preview.mjs --port 3090` depuis ce projet). Le contrôle couvre les neuf routes, les liens internes, les menus de soins, les navigations entre pages, les espaces réservés, les largeurs 1440/768/390/320 et les erreurs JavaScript/hydratation. `tools/next-check.mjs` conserve les contrôles historiques du précédent parcours de démonstration.
+`npm run build` inclut la compilation et TypeScript. Depuis le dossier parent : `node tools/booking-check.mjs`, avec l’export servi sur le port 3090 (`node scripts/preview.mjs --port 3090` depuis ce projet). Le contrôle couvre l’urgence, les validations, l’absence de photos/budget/courriel, les corrections, l’aller-retour avec photos sans perte du brouillon, les largeurs 1440/768/390/320, l’absence de transmission et les erreurs JavaScript. Les anciens contrôles de gabarit décrivent des espaces réservés désormais remplacés et doivent être adaptés avant réutilisation.
 
 Captures du gabarit dans `../preview/template/`.
 
