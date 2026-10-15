@@ -1,5 +1,5 @@
 .smile-hero{--hero-header:92px;--hero-ivory:#fffaf3;position:relative;background:#30221c;color:var(--hero-ivory)}
-.smile-hero>.pin-spacer,.smile-hero .smile-scene{max-width:100%}
+.smile-hero .smile-scene{max-width:100%}
 .smile-scene{position:relative;isolation:isolate;width:100%;height:calc(100svh - var(--hero-header));min-height:620px;overflow:hidden;background:#30221c}
 .smile-frame{position:absolute;inset:0;isolation:isolate;overflow:hidden}
 .smile-photograph{position:absolute;inset:0;will-change:transform;transform-origin:50% 50%}
@@ -14,7 +14,10 @@
 .smile-heading h1 em{color:#ead7be;font-size:1.06em}
 .smile-frame-top{position:absolute;top:7%;right:7%;z-index:1;font-size:8px;letter-spacing:.18em;color:#e2d6c8;text-align:right}
 .smile-frame-top span:first-child{display:none}
-.smile-scroll-cue{position:absolute;right:7%;bottom:175px;z-index:1;display:flex;align-items:center;gap:16px;color:#fffaf3;font-size:10px;letter-spacing:.02em}
+.smile-playback{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;color:#fffaf3;font-size:10px;letter-spacing:.02em}
+.smile-playback-toggle{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;min-width:92px;padding:0 12px;border:1px solid rgba(244,232,215,.35);border-radius:24px;background:rgba(27,21,18,.35);color:var(--hero-ivory);font:inherit;cursor:pointer}
+.smile-playback-toggle:hover{background:rgba(244,232,215,.12)}
+.smile-playback-toggle:focus-visible{outline:2px solid #f0ddc2;outline-offset:3px}
 .smile-story{position:absolute;z-index:2;left:7%;right:7%;bottom:24px;display:grid;grid-template-columns:1fr 340px;align-items:end;gap:24px 50px}
 .smile-captions{position:relative;min-height:74px;text-align:left}
 .smile-caption{position:absolute;inset:0;opacity:0}
@@ -31,7 +34,7 @@
 .smile-disclaimer{grid-column:1/-1;border-top:1px solid rgba(244,232,215,.16);padding-top:13px;color:#c5b8a8;font-size:9px;line-height:1.5}
 @media(min-width:1700px){.smile-heading h1{font-size:112px}.smile-heading{top:8%}.smile-caption h2{font-size:36px}.smile-story{bottom:30px}}
 @media(max-width:1100px){.smile-heading h1{font-size:clamp(52px,6.4vw,72px)}.smile-story{grid-template-columns:1fr 290px;column-gap:35px}.smile-caption h2{font-size:27px}.smile-caption p{font-size:11px}.smile-captions{min-height:95px}}
-@media(max-width:900px){.smile-hero{--hero-header:80px}.smile-heading{left:6%;right:6%;top:6%}.smile-heading h1{font-size:58px}.smile-frame-top{right:6%;top:6%}.smile-story{left:6%;right:6%;grid-template-columns:1fr 250px}.smile-scroll-cue{right:6%;bottom:195px}.smile-caption h2{font-size:25px}}
+@media(max-width:900px){.smile-hero{--hero-header:80px}.smile-heading{left:6%;right:6%;top:6%}.smile-heading h1{font-size:58px}.smile-frame-top{right:6%;top:6%}.smile-story{left:6%;right:6%;grid-template-columns:1fr 250px}.smile-caption h2{font-size:25px}}
 @media(max-width:700px){
  .smile-hero{--hero-header:76px}
  .smile-scene{height:calc(100svh - var(--hero-header));min-height:590px}
@@ -41,8 +44,8 @@
  .smile-frame-top{display:none}
  .smile-photograph{inset:17% 0 20%;mask-image:linear-gradient(to bottom,transparent,#000 20%,#000 77%,transparent);-webkit-mask-image:linear-gradient(to bottom,transparent,#000 20%,#000 77%,transparent)}
  .smile-frame:after{background:linear-gradient(180deg,rgba(27,21,18,.55),rgba(27,21,18,0) 30%,rgba(27,21,18,0) 52%,rgba(27,21,18,.7) 78%,rgba(27,21,18,.88))}
- .smile-scroll-cue{right:25px;bottom:253px;font-size:8px;gap:11px}
- .smile-scroll-cue svg{height:16px}
+ 
+ 
  .smile-story{left:25px;right:25px;bottom:80px;display:block}
  .smile-captions{min-height:77px}
  .smile-caption h2{font-size:23px}
@@ -53,8 +56,22 @@
  .smile-step b{font-size:7px;margin-bottom:3px}
  .smile-disclaimer{font-size:7px;line-height:1.6;margin-top:14px;padding-top:10px}
 }
-@media(max-width:360px){.smile-heading{left:22px;right:18px;top:25px}.smile-heading h1{font-size:34px}.smile-eyebrow{font-size:6px}.smile-story{left:22px;right:22px;bottom:79px}.smile-captions{min-height:88px}.smile-caption h2{font-size:21px}.smile-caption p{font-size:9px}.smile-scroll-cue{bottom:272px;right:22px}.smile-photograph{inset:18% 0 24%}}
-@media(max-height:760px) and (min-width:701px){.smile-scene{min-height:570px}.smile-heading{top:35px}.smile-heading h1{font-size:62px}.smile-eyebrow{margin-bottom:16px}.smile-story{bottom:20px;row-gap:15px}.smile-caption h2{font-size:26px}.smile-captions{min-height:74px}.smile-scroll-cue{bottom:156px}}
-@media(prefers-reduced-motion:reduce){.smile-before{opacity:0}.smile-caption:first-child{opacity:0}.smile-caption:last-child{opacity:1}.smile-scroll-cue{display:none}.smile-step{transition:none}}
+@media(max-width:360px){.smile-heading{left:22px;right:18px;top:25px}.smile-heading h1{font-size:34px}.smile-eyebrow{font-size:6px}.smile-story{left:22px;right:22px;bottom:79px}.smile-captions{min-height:88px}.smile-caption h2{font-size:21px}.smile-caption p{font-size:9px}.smile-photograph{inset:18% 0 24%}}
+@media(max-height:760px) and (min-width:701px){.smile-scene{min-height:570px}.smile-heading{top:35px}.smile-heading h1{font-size:62px}.smile-eyebrow{margin-bottom:16px}.smile-story{bottom:20px;row-gap:15px}.smile-caption h2{font-size:26px}.smile-captions{min-height:74px}}
+@media(prefers-reduced-motion:reduce){.smile-before,.smile-tooth-patches{opacity:0}.smile-caption:first-child{opacity:0}.smile-caption:last-child{opacity:1}.smile-playback{display:none}.smile-progress-fill{transform:scaleX(1)}.smile-step{transition:none}}
 .smile-hero .smile-scene{height:100svh}
-.smile-hero .smile-heading,.smile-hero .smile-frame-top{top:calc(var(--hero-header) + 30px)}
+.smile-hero .smile-frame-top{top:calc(var(--hero-header) + 30px)}
+
+/* Keep the title and animated story together at the foot of the photograph. */
+.smile-hero .smile-heading{position:relative;inset:auto;grid-column:1/-1}
+
+.smile-hero .smile-heading h1{font-size:clamp(52px,5.2vw,80px)}
+.smile-hero .smile-eyebrow{margin-bottom:16px}
+.smile-frame:after{background:linear-gradient(180deg,rgba(27,21,18,.6),rgba(27,21,18,.06) 25%,rgba(27,21,18,.06) 45%,rgba(27,21,18,.7) 72%,rgba(27,21,18,.94))}
+@media(max-width:700px){
+ .smile-hero .smile-heading{margin-bottom:20px}
+ .smile-hero .smile-heading h1{font-size:clamp(32px,8.8vw,52px)}
+ .smile-hero .smile-eyebrow{margin-bottom:12px}
+ .smile-hero .smile-photograph{inset:0;mask-image:none;-webkit-mask-image:none}
+ 
+}

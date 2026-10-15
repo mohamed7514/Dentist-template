@@ -4,6 +4,12 @@ Site patient construit avec **Next.js 16.4.0**, **React 19.3.0**, **TypeScript**
 
 ## Démarrage
 
+## Assistant patient
+
+Une bulle de discussion est disponible sur toutes les pages, avec accès aux soins, à la prise de photos, à la demande de rendez-vous et au panneau d’urgence. Le déploiement statique utilise actuellement des réponses guidées signalées comme telles. Le serveur Responses API OpenAI est préparé et testé, mais son activation et son déploiement serveur restent à faire après la connexion sécurisée du compte API. Voir [CHATBOT.md](CHATBOT.md) pour l’état réel, les tests et la procédure d’activation. Aucune clé n’est incluse dans le site.
+
+## Démarrage local
+
 ```sh
 npm install
 npm run dev
