@@ -15,7 +15,7 @@ export function SmileHero() {
   const root = useRef<HTMLElement>(null);
   useLayoutEffect(() => {
     const media = gsap.matchMedia();
-    media.add({ motion: "(prefers-reduced-motion: no-preference)", reduced: "(prefers-reduced-motion: reduce)" }, (context) => {
+    media.add({ motion: "(prefers-reduced-motion: no-preference)", reduced: "(prefers-reduced-motion: reduce)", mobile: "(max-width: 700px)" }, (context) => {
       const section = root.current;
       if (!section) return;
       const before = section.querySelector(".smile-before");
@@ -49,13 +49,16 @@ export function SmileHero() {
       gsap.set(photograph, { scale: 1.025 });
       markStage(0, 0);
 
+      const returnAt = context.conditions?.mobile ? 7 : 4.6;
+
       const timeline = gsap.timeline({
         defaults: { ease: "none" },
         paused: true,
         repeat: -1,
         onUpdate() {
           const progress = this.progress();
-          markStage(progress < 0.20 || progress >= 0.96 ? 0 : progress < 0.60 ? 1 : 2, progress);
+          const time = this.time();
+          markStage(time < 1 || time >= returnAt + 0.2 ? 0 : time < 3 ? 1 : 2, progress);
         },
       });
       timeline
@@ -69,13 +72,16 @@ export function SmileHero() {
         .fromTo(captions[1], { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.2 }, 1.1)
         .to(captions[1], { opacity: 0, y: -12, duration: 0.2 }, 2.8)
         .fromTo(captions[2], { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.2 }, 3)
-        // Fade back during the last 0.4 seconds for a seamless five-second loop.
-        .set([toothLeft, toothRight], { attr: { height: 0 } }, 4.6)
-        .to(before, { opacity: 1, filter: "saturate(1) brightness(1)", duration: 0.4, ease: "power1.inOut" }, 4.6)
-        .to(photograph, { scale: 1.025, duration: 0.4 }, 4.6)
-        .to(captions[2], { opacity: 0, y: -12, duration: 0.2 }, 4.6)
-        .fromTo(captions[0], { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.2, immediateRender: false }, 4.8)
-        .set(toothPatches, { opacity: 1 }, 5);
+        // Hold the final smile longer on phones before fading back.
+        .set([toothLeft, toothRight], { attr: { height: 0 } }, returnAt)
+        .to(before, { opacity: 1, filter: "saturate(1) brightness(1)", duration: 0.4, ease: "power1.inOut" }, returnAt)
+        .to(photograph, { scale: 1.025, duration: 0.4 }, returnAt)
+        .to(captions[2], { opacity: 0, y: -12, duration: 0.2 }, returnAt)
+        .fromTo(captions[0], { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.2, immediateRender: false }, returnAt + 0.2)
+        .set(toothPatches, { opacity: 1 }, returnAt + 0.4);
+
+      // Mobile: 2.5s initial, 5s transformation, 10s final, 1s return.
+      timeline.timeScale(context.conditions?.mobile ? 0.4 : 1);
 
       let inView = false;
       const images = Array.from(section.querySelectorAll<HTMLImageElement>(".smile-photograph > img"));

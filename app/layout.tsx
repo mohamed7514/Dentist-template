@@ -10,7 +10,7 @@ import "./editorial-layout.css";
 
 export const metadata: Metadata = {
   title: { default: "Retrouvez le plaisir de sourire — Épure", template: "%s — Épure" },
-  description: "Un parcours patient à votre rythme : implants, éclat et alignement du sourire.",
+  description: "Un parcours patient à votre rythme : implants, Invisalign et ponts dentaires.",
 };
 export const viewport: Viewport = { themeColor: "#282826", interactiveWidget: "resizes-content" };
 

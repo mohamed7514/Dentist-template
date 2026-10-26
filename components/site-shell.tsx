@@ -7,23 +7,26 @@ import {PrivacyButton} from "./actions";
 import "./site-header.css";
 import {services} from "@/lib/services";
 import {EmergencyAccess} from "./emergency-access";
+const immersiveHeroIds:Record<string,string>={"/implants":"implant-hero","/invisalign":"invisalign-hero","/pont-dentaire":"bridge-hero"};
 export function Brand(){return <Link className="brand" href="/" aria-label="Épure, accueil">épure<span>.</span><small>CLINIQUE DENTAIRE</small></Link>}
 export function SiteHeader(){
  const [menu,setMenu]=useState(false);
  const pathname=usePathname();
  const home=pathname==="/";
- const immersive=home||pathname.replace(/\/$/,"")==="/implants";
+ const serviceRoute=pathname.replace(/\/$/,"");
+ const heroId=home?"accueil":immersiveHeroIds[serviceRoute];
+ const immersive=Boolean(heroId);
  const [overHero,setOverHero]=useState(true);
  useEffect(()=>{
   setMenu(false);
-  if(!immersive) return;
+  if(!heroId) return;
   setOverHero(true);
-  const hero=document.querySelector(home?"#accueil":"#implant-hero");
+  const hero=document.getElementById(heroId);
   if(!hero) return;
   const observer=new IntersectionObserver(([entry])=>setOverHero(entry.isIntersecting),{rootMargin:"-92px 0px 0px 0px"});
   observer.observe(hero);
   return ()=>observer.disconnect();
- },[home,immersive,pathname]);
+ },[heroId,pathname]);
  if(pathname==="/rendez-vous/"||pathname==="/rendez-vous")return <header className="header booking-header"><Brand/><Link href="/" className="booking-exit">Retour au site <span aria-hidden="true">↗</span></Link></header>;
  return <>
  <header className={`header${immersive?" header-overlay":""}${immersive&&overHero?" header-on-hero":""}`}><Brand/><nav className="desktop-nav" aria-label="Navigation principale"><details className="services-dropdown" onKeyDown={event=>{if(event.key==="Escape"){event.currentTarget.open=false;event.currentTarget.querySelector("summary")?.focus()}}} onBlur={event=>{if(!event.currentTarget.contains(event.relatedTarget))event.currentTarget.open=false}}><summary>Nos soins <svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="m2 4 4 4 4-4" stroke="currentColor"/></svg></summary><div className="services-dropdown-panel">{services.map(service=><Link href={service.href} key={service.href} onClick={event=>event.currentTarget.closest("details")?.removeAttribute("open")}><span>{service.number}</span>{service.name}</Link>)}<Link href="/soins/" onClick={event=>event.currentTarget.closest("details")?.removeAttribute("open")}>Tous les soins <Arrow/></Link></div></details><Link href="/clinique/">La clinique</Link></nav>

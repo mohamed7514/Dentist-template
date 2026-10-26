@@ -1,0 +1,19 @@
+.invisalign-page .treatment-cinematic-copy h1 em{color:#dce9e4}
+.invisalign-understand{display:grid;grid-template-columns:1fr 1fr;gap:80px;padding-top:65px;padding-bottom:50px;border-bottom:1px solid var(--line);align-items:start}
+.invisalign-understand .eyebrow{font-size:9px;color:#6e7c5e;margin-bottom:17px}
+.invisalign-understand h2{font-size:42px;line-height:1.13}
+.invisalign-understand h2 em{color:#566b5d}
+.invisalign-understand>div>p:not(.eyebrow){font-size:14px;line-height:1.9;color:#73766c;max-width:530px}
+.invisalign-understand>div>p+p{margin-top:15px}
+.invisalign-source{display:inline-block;font-size:11px;line-height:1.7;color:#62765f;border-bottom:1px solid #bec9b7;margin-top:22px;padding-bottom:3px}
+@media(max-width:900px){.invisalign-understand{gap:40px}.invisalign-understand h2{font-size:35px}}
+@media(max-width:700px){
+ .invisalign-page .treatment-cinematic-media{left:-30px;right:-30px;width:calc(100% + 60px);top:70px}
+ .invisalign-page .treatment-cinematic-eyebrow{font-size:7px;letter-spacing:.13em}
+ .invisalign-understand{grid-template-columns:1fr;gap:20px;padding-top:33px;padding-bottom:30px}
+ .invisalign-understand .eyebrow{font-size:8px;margin-bottom:12px}
+ .invisalign-understand h2{font-size:30px;line-height:1.15}
+ .invisalign-understand>div>p:not(.eyebrow){font-size:13px;line-height:1.85}
+ .invisalign-understand>div>p+p{margin-top:12px}
+ .invisalign-source{font-size:10px;margin-top:17px}
+}

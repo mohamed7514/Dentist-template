@@ -6,7 +6,7 @@
 // - A problem is matched to ONE service, with a single clear next step.
 // - An explicit request (or a "yes") always shows the booking button. Unprompted offers happen when a
 //   service is first identified or after a few turns, and never more than MAX_CTA times: no pressure.
-export const NEEDS=["dent","multiple","eclat","alignement"];
+export const NEEDS=["dent","multiple","eclat","alignement","pont"];
 export const MAX_CTA=2;
 export const CTA_AFTER_TURNS=3;
 const known=need=>NEEDS.includes(need);
@@ -23,6 +23,7 @@ const plain=text=>String(text).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCa
 // Keyword pass so routing never depends only on the model.
 export function needFromText(text){
  const q=plain(text);
+ if(/\bponts?\b|\bbridges?\b/.test(q))return "pont";
  if(/plusieurs (dents|implants)|dents manquantes|toutes mes dents/.test(q))return "multiple";
  if(/implant|dent (manquant|enlev|arrach|perdu|tomb|absent|extrait|vide|creuse|qui manque)|(perdu|enleve|arrache|extrait|tombe)e? (une|ma|la|mes|des) dents?|il me manque|me manque (une|des) dent|extraction|un trou|remplacer une dent/.test(q))return "dent";
  if(/blanch|eclat|jaune|plus lumineux|couleur de mes dents/.test(q))return "eclat";
@@ -31,8 +32,8 @@ export function needFromText(text){
 }
 export const accepts=text=>/^(oui|ok|d.?accord|allons.?y|volontiers|avec plaisir|pourquoi pas|c.?est parti|je veux bien)(\b|$)/.test(plain(text).trim());
 export const wantsBooking=text=>/rendez.?vous|reserver|consultation|evaluation|disponibilit|je veux commencer|prendre un rdv/.test(plain(text));
-export const servicePage={dent:"implants",multiple:"implants",eclat:"blanchiment",alignement:"alignement"};
-export const bookingAction=state=>"start_"+(known(state.need)?state.need:"avis");
+export const servicePage={dent:"implants",multiple:"implants",alignement:"alignement",pont:"pont"};
+export const bookingAction=state=>"start_"+(state.need==="pont"?"dent":known(state.need)?state.need:"avis");
 // Route the turn. `turns` already includes the current user message.
 export function route(previous,{text,modelNeed}){
  const state={...previous,turns:previous.turns+1};
@@ -43,11 +44,11 @@ export function route(previous,{text,modelNeed}){
  const actions=[];
  const offer=state.shown<MAX_CTA&&(first||(state.turns>=CTA_AFTER_TURNS&&state.shown===0));
  if(asked||offer){actions.push(bookingAction(state));state.shown=Math.min(state.shown+1,MAX_CTA)}
- if(first){actions.push(servicePage[state.need]);state.linked=true}
+ if(first){const page=servicePage[state.need];if(page)actions.push(page);state.linked=true}
  return {state,actions:actions.slice(0,2)};
 }
 export function needDirective(state){
  return known(state.need)
   ?`Le visiteur s’intéresse à : ${state.need}. Réponds précisément à sa question sur ce soin. Pose une question seulement si elle est utile.`
-  :"Le besoin n’est pas encore clair. Si la personne décrit un problème, nomme le soin le plus pertinent parmi implants, blanchiment, alignement, explique en une phrase pourquoi une évaluation aide, et propose de continuer. Sinon pose UNE question pour comprendre ce qui la gêne.";
+  :"Le besoin n’est pas encore clair. Si la personne décrit un problème, nomme le soin le plus pertinent parmi implants, pont dentaire, alignement, explique en une phrase pourquoi une évaluation aide, et propose de continuer. Sinon pose UNE question pour comprendre ce qui la gêne.";
 }

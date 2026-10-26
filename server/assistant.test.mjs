@@ -22,10 +22,10 @@ test("routing: a problem is matched to one service with a booking button and the
  assert.deepEqual(r.actions,["start_dent","implants"]);assert.equal(r.state.need,"dent");assert.equal(r.state.shown,1);assert.equal(r.state.linked,true);
  assert.match(call.instructions,/Le visiteur s’intéresse à : dent/);assert.deepEqual(call.text.format.schema.required,["text","need"]);
 });
-test("routing: questions do not push; the service is linked once; booking appears on request",async()=>{
+test("routing: a whitening question keeps booking available without linking the deleted page",async()=>{
  const h=createAssistantHandler({fetcher:async()=>modelReply({text:"Réponse."})});
  const first=await turn(h,"Bonjour");assert.deepEqual(first.actions,[]);
- const second=await turn(h,"Le blanchiment fait-il mal ?",first.state);assert.deepEqual(second.actions,["start_eclat","blanchiment"]);
+ const second=await turn(h,"Le blanchiment fait-il mal ?",first.state);assert.deepEqual(second.actions,["start_eclat"]);
  const third=await turn(h,"Combien de séances ?",second.state);assert.deepEqual(third.actions,[]);
  const asked=await turn(h,"Je voudrais un rendez-vous",third.state);assert.deepEqual(asked.actions,["start_eclat"]);assert.equal(asked.state.shown,2);
  const again=await turn(h,"Je veux réserver une consultation",asked.state);assert.deepEqual(again.actions,["start_eclat"]);assert.equal(again.state.shown,2);

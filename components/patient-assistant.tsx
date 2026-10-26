@@ -46,7 +46,7 @@ export function PatientAssistant(){
  function close(){dialog.current?.close();setOpen(false);launcher.current?.focus({preventScroll:true})}
  function reset(){serial.current++;controller.current?.abort();setBusy(false);setLead(null);setMessages([welcomeFor(pathname)]);setQuestion("");setPending("");setError("")}
  function emergency(){close();window.dispatchEvent(new Event("epure:open-emergency"))}
- function launch(goal?:Goal){close();start(goal,{prefill:!!goal})}
+ function launch(goal?:Goal){close();start(goal)}
  function say(user:string,reply:Omit<Message,"id"|"role">){const id=++serial.current*2;setMessages(current=>[...current.map(m=>({...m,chips:undefined})),{id:id-1,role:"user",text:user},{id,role:"assistant",...reply}])}
  function pick(label:string){
   if(label===triage.book){say(label,{text:"Très bien. La demande prend environ 2 minutes, sans engagement : rien n’est confirmé tant que la réception ne l’a pas validée."});launch();return}

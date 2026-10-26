@@ -1,0 +1,19 @@
+.bridge-page .treatment-cinematic-copy h1 em{color:#eadbc6}
+.bridge-understand{display:grid;grid-template-columns:1fr 1fr;gap:80px;padding-top:65px;padding-bottom:50px;border-bottom:1px solid var(--line);align-items:start}
+.bridge-understand .eyebrow{font-size:9px;color:#7d705d;margin-bottom:17px}
+.bridge-understand h2{font-size:42px;line-height:1.13}
+.bridge-understand h2 em{color:#7a6e5b}
+.bridge-understand>div>p:not(.eyebrow){font-size:14px;line-height:1.9;color:#73766c;max-width:530px}
+.bridge-understand>div>p+p{margin-top:15px}
+.bridge-source{display:inline-block;font-size:11px;line-height:1.7;color:#786d5a;border-bottom:1px solid #c8bead;margin-top:22px;padding-bottom:3px}
+@media(max-width:900px){.bridge-understand{gap:40px}.bridge-understand h2{font-size:35px}}
+@media(max-width:700px){
+ .bridge-page .treatment-cinematic-media{left:-20px;right:-20px;width:calc(100% + 40px);top:70px}
+ .bridge-page .treatment-cinematic-eyebrow{font-size:7px;letter-spacing:.13em}
+ .bridge-understand{grid-template-columns:1fr;gap:20px;padding-top:33px;padding-bottom:30px}
+ .bridge-understand .eyebrow{font-size:8px;margin-bottom:12px}
+ .bridge-understand h2{font-size:30px;line-height:1.15}
+ .bridge-understand>div>p:not(.eyebrow){font-size:13px;line-height:1.85}
+ .bridge-understand>div>p+p{margin-top:12px}
+ .bridge-source{font-size:10px;margin-top:17px}
+}

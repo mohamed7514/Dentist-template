@@ -1,0 +1,21 @@
+{
+  "width": 1080,
+  "height": 1080,
+  "fps": 60,
+  "duration": 12,
+  "jaw": {
+    "left": 60,
+    "top": 350,
+    "width": 960
+  },
+  "bridge": {
+    "left": 244,
+    "top": 386,
+    "width": 588
+  },
+  "hoverOffset": -210,
+  "placement": {
+    "start": 1.4,
+    "end": 5.6
+  }
+}

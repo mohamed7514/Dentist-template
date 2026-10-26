@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Arrow } from "@/components/icons";
 import { ImplantHero } from "@/components/implant-hero";
-import "./implants.css";
 
 export const metadata = {
   title: "Implants dentaires · Retrouver le plaisir de sourire",
@@ -18,11 +17,11 @@ const questions = [
 ] as const;
 
 export default function Page() {
-  return <main id="main" className="implants-page">
+  return <main id="main" className="implants-page treatment-page">
     <ImplantHero />
 
 
-    <section className="faq-section implant-faq wrap" id="questions" aria-labelledby="implant-faq-heading">
+    <section className="faq-section treatment-faq wrap" id="questions" aria-labelledby="implant-faq-heading">
       <div className="faq-intro"><p className="eyebrow">DES QUESTIONS NORMALES.</p><h2 id="implant-faq-heading">Le temps<br /><em>de comprendre.</em></h2><p>Chaque sourire a son histoire.<br />Voici quelques premiers repères pour la suite.</p><Link href="/rendez-vous/" className="text-link">Parler de mon projet <Arrow /></Link></div>
       <div className="faq-list">{questions.map(([question, answer]) => <details key={question}><summary>{question}<span aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div>
     </section>

@@ -1,6 +1,14 @@
 import {test} from "node:test";
 import assert from "node:assert/strict";
 import {emptyState,route,needFromText,wantsBooking,bookingAction} from "./lead-process.mjs";
+test("a tooth-supported bridge question links its page and keeps the existing missing-tooth booking flow",()=>{
+ const first=route(emptyState(),{text:"Je voudrais un pont pour remplacer une dent"});
+ assert.equal(first.state.need,"pont");
+ assert.deepEqual(first.actions,["start_dent","pont"]);
+ const next=route(first.state,{text:"Oui, je voudrais un rendez-vous"});
+ assert.equal(next.state.need,"pont");
+ assert.deepEqual(next.actions,["start_dent"]);
+});
 test("needs and booking intent are read from text, accents ignored",()=>{
  assert.equal(needFromText("J’ai perdu une dent"),"dent");assert.equal(needFromText("plusieurs dents manquantes"),"multiple");
  assert.equal(needFromText("mes dents sont jaunes"),"eclat");assert.equal(needFromText("dents croches"),"alignement");assert.equal(needFromText("bonjour"),"inconnu");

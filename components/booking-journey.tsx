@@ -4,10 +4,12 @@ import Link from "next/link";
 import {useEffect,useRef,useState,type FormEvent} from "react";
 import {Arrow} from "./icons";
 import {usePhotoSession} from "./photo-session";
+import {GuidedPhotos} from "./photo-capture";
+import {services} from "@/lib/services";
 import {useBookingSession,type BookingDraft} from "./booking-session";
 import "./booking-journey.css";
 
-const needs=["Implants dentaires"];
+const needs=services.map(service=>service.name);
 const timings=["Dès que possible","Dans les 3 prochains mois","Je prends le temps de me renseigner"];
 const insurances=["Oui, j’en ai une","Non","Je ne sais pas"];
 const budgets=["J’ai besoin d’un devis","Moins de 5 000 $","5 000 à 10 000 $","Plus de 10 000 $"];
@@ -38,7 +40,8 @@ function Calendar({value,minimum,onChange}:{value:string;minimum:string;onChange
 
 export function BookingJourney(){
  const {step,setStep,draft,setDraft}=useBookingSession();
- const {photos,clear}=usePhotoSession();
+ const {photos,replace,clear}=usePhotoSession();
+ const [photoStage,setPhotoStage]=useState(false);
  const photoCount=photos.filter(Boolean).length;
  const [minimum,setMinimum]=useState("");
  const [error,setError]=useState("");
@@ -55,9 +58,10 @@ export function BookingJourney(){
  },[step]);
  function update(key:keyof BookingDraft,value:string){setDraft(current=>({...current,[key]:value}));setError("")}
  function go(next:number){interacted.current=true;setError("");setStep(next)}
- function answer(key:keyof BookingDraft,value:string){update(key,value);go(editing?6:step+1);setEditing(false)}
+ function answer(key:keyof BookingDraft,value:string){update(key,value);if(key==="need"&&!editing){interacted.current=true;setPhotoStage(true);return}go(editing?6:step+1);setEditing(false)}
+ function finishPhotos(){setPhotoStage(false);go(1)}
  function edit(next:number){setEditing(true);go(next)}
- function back(){setEditing(false);go(editing?6:step-1)}
+ function back(){if(photoStage){setPhotoStage(false);return}setEditing(false);go(editing?6:step-1)}
  function advance(event:FormEvent<HTMLFormElement>){
   event.preventDefault();
   if(step===4&&(!draft.date||draft.date<minimum||!draft.period)){setError("Choisissez un jour et un moment de la journée.");return}
@@ -79,8 +83,8 @@ export function BookingJourney(){
      <h1 ref={heading} tabIndex={-1}>De quoi avez-vous<br/><em>besoin ?</em></h1>
      <div className="booking-entry"><button type="button" data-booking-consultation onClick={()=>go(0)}><span className="booking-entry-icon"><JourneyIcon/></span><strong>Une consultation</strong><span className="booking-entry-action">Commencer <Arrow/></span></button><button type="button" data-booking-urgent onClick={openEmergency}><span className="booking-entry-icon"><JourneyIcon kind={5}/></span><strong>Une urgence</strong><span className="booking-entry-action">Voir les contacts <Arrow/></span></button></div>
     </>:step===7?<div className="booking-complete"><span className="booking-complete-icon" aria-hidden="true">✓</span><h1 ref={heading} tabIndex={-1}>Demande <em>envoyée.</em></h1><div className="booking-complete-date"><strong>{displayDate(draft.date)}</strong><span>{draft.period}</span></div><p className="booking-confirmation-note">La réception vous confirme le rendez-vous.</p><Link href="/" className="booking-primary">Retour au site <Arrow/></Link><button type="button" className="booking-text-button" onClick={()=>go(6)}>Revoir</button></div>:<>
-     <h1 ref={heading} tabIndex={-1}>{titles[step]}</h1>
-     {step===0?choice(needs,"need"):step===1?choice(timings,"timing"):step===2?choice(insurances,"insurance"):step===3?<>{choice(budgets,"budget")}<button type="button" className="booking-skip" onClick={()=>answer("budget","")}>Passer <Arrow/></button></>:<form onSubmit={advance} onInvalidCapture={event=>{if(event.target instanceof HTMLElement)event.target.closest("details")?.setAttribute("open","")}}>
+     <h1 ref={heading} tabIndex={-1}>{step===0&&photoStage?"Des photos ?":titles[step]}</h1>
+     {step===0&&photoStage?<GuidedPhotos embedded photos={photos} replace={replace} clear={clear} onFinish={finishPhotos} onSkip={()=>{clear();finishPhotos()}}/>:step===0?choice(needs,"need"):step===1?choice(timings,"timing"):step===2?choice(insurances,"insurance"):step===3?<>{choice(budgets,"budget")}<button type="button" className="booking-skip" onClick={()=>answer("budget","")}>Passer <Arrow/></button></>:<form onSubmit={advance} onInvalidCapture={event=>{if(event.target instanceof HTMLElement)event.target.closest("details")?.setAttribute("open","")}}>
       {step===4?<div className="booking-date-choice"><Calendar value={draft.date} minimum={minimum} onChange={value=>update("date",value)}/><fieldset className="booking-periods" aria-label="Moment de la journée"><div>{periods.map(period=><label key={period} className={draft.period===period?"selected":""}><input type="radio" name="period" value={period} checked={draft.period===period} onChange={()=>update("period",period)}/>{period}</label>)}</div></fieldset><p className="booking-date-summary" aria-live="polite">{draft.date?`${displayDate(draft.date)}${draft.period?` · ${draft.period}`:""}`:"Choisissez un jour."}</p></div>:step===5?<>
        <div className="booking-fields"><label>Prénom<input name="firstName" autoComplete="given-name" maxLength={80} required value={draft.firstName} onChange={event=>update("firstName",event.target.value)}/></label><label>Nom<input name="lastName" autoComplete="family-name" maxLength={80} required value={draft.lastName} onChange={event=>update("lastName",event.target.value)}/></label><label className="booking-field-wide">Téléphone<input name="phone" type="tel" inputMode="tel" autoComplete="tel" maxLength={25} required placeholder="514 555-0123" value={draft.phone} onChange={event=>update("phone",event.target.value)}/></label></div>
        <details className="booking-extra" open={!!draft.email||!!draft.note||undefined}><summary>Courriel ou question <span>Facultatif</span></summary><div className="booking-fields"><label className="booking-field-wide">Courriel<input name="email" type="email" autoComplete="email" maxLength={254} value={draft.email} onChange={event=>update("email",event.target.value)}/></label><label className="booking-field-wide">Votre question<textarea name="note" rows={2} maxLength={500} value={draft.note} onChange={event=>update("note",event.target.value)}/></label></div></details>

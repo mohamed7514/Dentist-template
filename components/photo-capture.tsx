@@ -82,7 +82,7 @@ export function PhotoCapture(){
  return <GuidedPhotos {...session}/>;
 }
 
-/** Guided capture. Without `onFinish`/`onSkip` it leads to the booking page; the evaluation pop-up passes its own callbacks. */
+/** Guided capture. By default it ends on the booking page; the booking journey embeds it with its own callbacks. */
 export function GuidedPhotos({photos,replace,clear,onFinish,onSkip,embedded=false}:FlowProps){
  const [index,setIndex]=useState(0),[review,setReview]=useState(false),[live,setLive]=useState(false),[pending,setPending]=useState(false),[videoReady,setVideoReady]=useState(false);
  const [facing,setFacing]=useState<"user"|"environment">("user"),[shot,setShot]=useState<PreparedPhoto|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState("");
@@ -174,7 +174,7 @@ export function GuidedPhotos({photos,replace,clear,onFinish,onSkip,embedded=fals
       <button type="button" className="pc-primary" data-capture-camera disabled={busy||pending} onClick={()=>void startCamera()}><Camera/>{pending?"Autorisez la caméra…":"Ouvrir la caméra"}</button>
       <div className="pc-row"><button type="button" className="pc-link" disabled={busy} onClick={()=>fileRef.current?.click()}>{busy?"Préparation…":"Choisir dans la galerie"}</button>{index===2&&count>0&&<button type="button" className="pc-link" onClick={showReview}>Passer</button>}</div>
      </>}
-     {onSkip?<button type="button" className="pc-skip" onClick={()=>{stopCamera();onSkip()}}>Continuer sans photos</button>:<Link className="pc-skip" href="/rendez-vous/" onClick={()=>{stopCamera();clear()}}>Continuer sans photos</Link>}
+     {onSkip?<button type="button" className="pc-skip" onClick={()=>{stopCamera();onSkip()}}>Passer cette étape <Arrow/></button>:<Link className="pc-skip" href="/rendez-vous/" onClick={()=>{stopCamera();clear()}}>Passer cette étape <Arrow/></Link>}
     </div>
    </div>
   </div>}
