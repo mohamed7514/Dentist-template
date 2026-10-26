@@ -115,17 +115,6 @@ main .feature-next h2{font-size:28px;margin-top:7px}
 main .photo-page-intro{padding-top:25px;padding-bottom:22px}
 main .photo-page-intro>div{gap:32px}
 main .photo-page-intro>div>p{font-size:13px;line-height:1.75;max-width:300px}
-main .capture-stepper{margin-bottom:20px}
-main .capture-layout{gap:36px;padding:24px}
-main .capture-instructions{padding-top:0}
-main .capture-instructions h2{font-size:32px;line-height:1.16}
-main .capture-instructions>p:not(.eyebrow){font-size:13px;line-height:1.75;margin-top:12px}
-.capture-tips{margin:15px 0}
-.capture-tips summary{font-size:12px;color:#86735a;cursor:pointer;padding:6px 0}
-main .capture-tips ul{margin:10px 0 0}
-main .capture-controls{padding-top:16px}
-main .capture-workspace{padding-bottom:35px}
-main .capture-review-heading h2{font-size:36px;line-height:1.15}
 .closing.wrap{display:flex;align-items:center;justify-content:space-between;gap:30px;padding:32px 38px;text-align:left}
 .closing .eyebrow{font-size:8px;margin-bottom:12px}
 .closing.wrap h2{font-size:38px;line-height:1.12}
@@ -233,20 +222,6 @@ main .capture-review-heading h2{font-size:36px;line-height:1.15}
  main .photo-page-intro{padding-top:20px;padding-bottom:18px}
  main .photo-page-intro h1{font-size:32px}
  main .photo-page-intro>div>p{font-size:12px;line-height:1.7;margin-top:12px;max-width:none;padding:0}
- main .capture-stepper{gap:7px;margin-bottom:16px}
- main .capture-stepper>button{padding:11px 9px}
- main .capture-stepper>button>span{width:24px;height:24px;margin-bottom:6px}
- main .capture-layout{display:flex;flex-direction:column;gap:20px;padding:16px}
- main .capture-layout .capture-view{order:2;width:100%}
- main .capture-layout .capture-instructions{order:1;width:100%;padding:0}
- main .capture-layout.capture-active .capture-view{order:0}
- main .capture-layout:not(.capture-active) .capture-next{display:none}
- main .capture-instructions h2{font-size:28px;line-height:1.15}
- main .capture-instructions>p:not(.eyebrow){font-size:13px;margin-top:10px}
- .capture-tips{margin:10px 0}
- main .capture-controls{padding-top:13px}
- main .capture-workspace{padding-bottom:25px}
- main .capture-review-heading h2{font-size:30px}
  .closing.wrap{display:block;text-align:left;padding:26px 24px}
  .closing.wrap h2{font-size:31px}
  .closing .eyebrow{margin-bottom:10px}
