@@ -73,3 +73,13 @@
 @keyframes chat-pop{from{transform:scale(0)}to{transform:scale(1)}}
 @keyframes chat-pulse{0%{box-shadow:0 0 0 0 #34302b66}100%{box-shadow:0 0 0 18px #34302b00}}
 @media(prefers-reduced-motion:reduce){.chat-badge,.chat-launcher.has-badge::after{animation:none}}
+
+/* Larger floating chat button */
+@keyframes chat-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes chat-ring{0%{box-shadow:0 0 0 0 #34302b55,0 12px 34px #231b1850}70%,100%{box-shadow:0 0 0 18px #34302b00,0 12px 34px #231b1850}}
+html .chat-launcher{right:28px;bottom:28px;width:76px;height:76px;box-shadow:0 12px 34px #231b1850;animation:chat-float 3.6s ease-in-out infinite,chat-ring 2.8s ease-out infinite}
+html .chat-launcher svg{width:34px;height:34px}
+html .chat-launcher:hover{animation-play-state:paused;transform:scale(1.08)}
+html .chat-teaser{right:28px;bottom:118px}
+@media(max-width:700px){html .chat-launcher{right:16px;bottom:calc(92px + env(safe-area-inset-bottom));width:68px;height:68px}html .chat-launcher svg{width:31px;height:31px}html .chat-teaser{right:16px;bottom:calc(172px + env(safe-area-inset-bottom))}}
+@media(prefers-reduced-motion:reduce){html .chat-launcher{animation:none}}

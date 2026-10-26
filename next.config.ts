@@ -4,6 +4,7 @@ const config: NextConfig = {
   trailingSlash: true,
   images: { unoptimized: true },
   poweredByHeader: false,
+  allowedDevOrigins: ["127.0.0.1", "localhost", "192.168.*.*", "10.*.*.*"],
   experimental: { agentUpgrade: "security" },
 };
 export default config;

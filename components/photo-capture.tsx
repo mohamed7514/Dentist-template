@@ -74,8 +74,16 @@ async function preparePhoto(source:File|HTMLVideoElement,mirror=false):Promise<P
  }finally{if(originalUrl)URL.revokeObjectURL(originalUrl)}
 }
 
+type FlowProps={photos:({url:string}|null)[];replace:(index:number,photo:PreparedPhoto|null)=>void;clear:()=>void;onFinish?:()=>void;onSkip?:()=>void;embedded?:boolean};
+
+/** The photos page: pictures live in the photo session shared with the booking page. */
 export function PhotoCapture(){
- const {photos,replace,clear}=usePhotoSession();
+ const session=usePhotoSession();
+ return <GuidedPhotos {...session}/>;
+}
+
+/** Guided capture. Without `onFinish`/`onSkip` it leads to the booking page; the evaluation pop-up passes its own callbacks. */
+export function GuidedPhotos({photos,replace,clear,onFinish,onSkip,embedded=false}:FlowProps){
  const [index,setIndex]=useState(0),[review,setReview]=useState(false),[live,setLive]=useState(false),[pending,setPending]=useState(false),[videoReady,setVideoReady]=useState(false);
  const [facing,setFacing]=useState<"user"|"environment">("user"),[shot,setShot]=useState<PreparedPhoto|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState("");
  const streamRef=useRef<MediaStream|null>(null),videoRef=useRef<HTMLVideoElement>(null),fileRef=useRef<HTMLInputElement>(null),nativeRef=useRef<HTMLInputElement>(null),headingRef=useRef<HTMLHeadingElement>(null),shutterRef=useRef<HTMLButtonElement>(null);
@@ -144,7 +152,7 @@ export function PhotoCapture(){
  }
  const next=()=>index<2?move(index+1):showReview();
 
- return <section className="pc wrap" aria-label="Prise de photos guidée">
+ return <section className={"pc"+(embedded?" pc-embedded":" wrap")} aria-label="Prise de photos guidée">
   <div className="pc-steps" role="group" aria-label="Angles de prise de vue">{guides.map((item,i)=><button type="button" key={item.label} onClick={()=>move(i)} aria-current={!review&&index===i?"step":undefined} className={photos[i]?"has-photo":""}><span>{photos[i]?<Check/>:i+1}</span>{item.short}</button>)}</div>
   {review?<div className="pc-review">
    <h2 ref={headingRef} tabIndex={-1}>Vos photos.</h2>
@@ -152,7 +160,7 @@ export function PhotoCapture(){
     <button type="button" className="pc-thumb" onClick={()=>move(i)} aria-label={photos[i]?`Reprendre : ${item.label}`:`Ajouter : ${item.label}`}>{photos[i]?<img src={photos[i]!.url} alt={`Votre photo : ${item.label}`}/>:<><PhotoGuide index={i}/><b>+ Ajouter</b></>}</button>
     <p>{item.short}{photos[i]&&<button type="button" className="pc-remove" aria-label={`Supprimer la photo ${item.label}`} onClick={()=>replace(i,null)}>Retirer</button>}</p>
    </div>)}</div>
-   <div className="pc-actions"><Link className="pc-primary" href="/rendez-vous/">Préparer mon rendez-vous <Arrow/></Link><button type="button" className="pc-link" onClick={()=>{clear();move(0)}}>Tout effacer</button></div>
+   <div className="pc-actions">{onFinish?<button type="button" className="pc-primary" onClick={onFinish}>Continuer <Arrow/></button>:<Link className="pc-primary" href="/rendez-vous/">Préparer mon rendez-vous <Arrow/></Link>}<button type="button" className="pc-link" onClick={()=>{clear();move(0)}}>Tout effacer</button></div>
   </div>:<div className="pc-step">
    <div className="pc-frame">{photo?<img src={photo.url} alt={`Votre photo : ${guide.label}`}/>:<PhotoGuide index={index}/>}{index===2&&!photo&&<span className="pc-tag">Facultatif</span>}</div>
    <div className="pc-side">
@@ -166,7 +174,7 @@ export function PhotoCapture(){
       <button type="button" className="pc-primary" data-capture-camera disabled={busy||pending} onClick={()=>void startCamera()}><Camera/>{pending?"Autorisez la caméra…":"Ouvrir la caméra"}</button>
       <div className="pc-row"><button type="button" className="pc-link" disabled={busy} onClick={()=>fileRef.current?.click()}>{busy?"Préparation…":"Choisir dans la galerie"}</button>{index===2&&count>0&&<button type="button" className="pc-link" onClick={showReview}>Passer</button>}</div>
      </>}
-     <Link className="pc-skip" href="/rendez-vous/" onClick={()=>{stopCamera();clear()}}>Continuer sans photos</Link>
+     {onSkip?<button type="button" className="pc-skip" onClick={()=>{stopCamera();onSkip()}}>Continuer sans photos</button>:<Link className="pc-skip" href="/rendez-vous/" onClick={()=>{stopCamera();clear()}}>Continuer sans photos</Link>}
     </div>
    </div>
   </div>}

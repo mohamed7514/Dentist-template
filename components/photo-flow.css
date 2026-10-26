@@ -22,7 +22,7 @@
 .pc-primary svg{width:20px;height:20px;flex:none}
 .pc-row{display:flex;justify-content:center;gap:28px}
 .pc-link{padding:10px 4px;background:none;color:#6f5d44;font-size:14px;text-decoration:underline;text-underline-offset:4px;min-height:44px}
-.pc-skip{justify-self:center;padding:6px;font-size:12px;color:#9a8b76}
+.pc-skip{background:none;justify-self:center;padding:6px;font-size:12px;color:#9a8b76}
 .pc-error{padding:11px 14px;background:#f9eee8;border-left:2px solid #bb8571;color:#9b4c3b;font-size:13px;line-height:1.6}
 @media(max-width:859px){.pc{padding-bottom:calc(104px + env(safe-area-inset-bottom))}.pc-info h2{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.pc-info p{margin:0;text-align:center}}
 @media(min-width:860px){.pc-frame{width:100%;height:max(420px,calc(100dvh - 190px))}.pc-steps{max-width:1000px;margin-inline:auto}.pc-step{grid-template-columns:minmax(0,520px) minmax(0,1fr);gap:64px;align-items:center;max-width:1000px;margin-inline:auto}.pc-frame{margin:0}.pc-info h2{font-size:38px}.pc-info p{font-size:16px;margin-top:10px}.pc-side{display:grid;gap:26px}.pc-row{justify-content:flex-start}.pc-skip{justify-self:start;padding-left:0}}
@@ -56,3 +56,9 @@
 .pc-cam-ghost{flex:1;max-width:160px;background:#ffffff2e;color:#fff;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .pc-cam-use{flex:2;max-width:260px;background:#fff;color:#1d1a16}.pc-cam-use svg{width:20px;height:20px}
 .pc-cam button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+
+/* Embedded in the evaluation pop-up */
+.pc-embedded{padding:0}
+.pc-embedded .pc-steps,.pc-embedded .pc-step,.pc-embedded .pc-review{max-width:none}
+.pc-embedded .pc-frame{height:max(260px,calc(100dvh - 430px))}
+@media(min-width:860px){.pc-embedded .pc-step{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px}.pc-embedded .pc-frame{width:100%;height:min(58dvh,460px)}}

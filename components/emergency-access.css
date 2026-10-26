@@ -9,3 +9,22 @@
 /* Minimal panel: one call button. */
 .emergency-panel{display:grid;gap:14px}
 .emergency-dialog{width:320px}
+
+/* Desktop: the emergency access lives in the top bar; the floating pill is gone. */
+.emergency-float{display:none!important}
+.header-emergency{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border:1px solid #c4b194;border-radius:999px;background:#f3ede4;color:#665139;font-size:12px;font-weight:500;white-space:nowrap;transition:background .2s}
+.header-emergency svg{width:16px;height:16px;flex-shrink:0}
+.header-emergency:hover{background:#eadfce}
+.header-on-hero .header-emergency{background:#ffffff1f;border-color:#ffffff80;color:#fff}
+@media(max-width:700px){.header-emergency{display:none}}
+@media(min-width:701px){.emergency-dialog{inset:84px 28px auto auto;max-height:calc(100dvh - 110px)}}
+
+/* Mobile: make the hero actions stand out (shimmer sweep + soft pulse). */
+@keyframes cta-shimmer{0%{transform:translateX(-120%) skewX(-20deg)}55%,100%{transform:translateX(220%) skewX(-20deg)}}
+@keyframes cta-pulse{0%{box-shadow:0 0 0 0 #28282666}70%,100%{box-shadow:0 0 0 12px #28282600}}
+@keyframes cta-pulse-soft{0%{box-shadow:0 0 0 0 #b7a48b88}70%,100%{box-shadow:0 0 0 12px #b7a48b00}}
+@media(max-width:700px) and (prefers-reduced-motion:no-preference){
+.patient-action-bar>a,.implant-cinematic-cta,.header .btn.small{position:relative;overflow:hidden;animation:cta-pulse 2.4s ease-out infinite}
+.patient-action-bar>a::after,.implant-cinematic-cta::after,.header .btn.small::after{content:"";position:absolute;top:0;bottom:0;left:0;width:40%;background:linear-gradient(90deg,#fff0,#ffffff59,#fff0);animation:cta-shimmer 3.2s ease-in-out infinite;pointer-events:none}
+.patient-action-bar>button{animation:cta-pulse-soft 2.4s ease-out .6s infinite}
+}
