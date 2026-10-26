@@ -20,6 +20,19 @@ export function PatientAssistant(){
  const chips=!busy&&!pending&&last?.role==="assistant"?last.chips??[]:[];
  useEffect(()=>{const abort=new AbortController();fetch("/api/chat/status.json",{signal:abort.signal,cache:"no-store"}).then(r=>r.ok?r.json():null).then(data=>setReady(data?.ready===true)).catch(()=>{}).finally(()=>setChecking(false));return()=>{abort.abort();controller.current?.abort()}},[]);
  useEffect(()=>{list.current?.scrollTo({top:list.current.scrollHeight,behavior:"instant"})},[messages,busy,pending]);
+ // Phones: the chat is a full-screen sheet that follows the visible area, so the on-screen keyboard never shifts or hides it.
+ useEffect(()=>{
+  if(!open)return;
+  const vv=window.visualViewport,root=document.documentElement,phone=window.matchMedia("(max-width:700px)");
+  const sync=()=>{
+   if(!vv||!phone.matches){root.style.removeProperty("--chat-vh");root.style.removeProperty("--chat-top");return}
+   root.style.setProperty("--chat-vh",vv.height+"px");root.style.setProperty("--chat-top",vv.offsetTop+"px");
+   list.current?.scrollTo({top:list.current.scrollHeight,behavior:"instant"});
+  };
+  sync();root.classList.add("chat-open");
+  vv?.addEventListener("resize",sync);vv?.addEventListener("scroll",sync);
+  return()=>{vv?.removeEventListener("resize",sync);vv?.removeEventListener("scroll",sync);root.classList.remove("chat-open");root.style.removeProperty("--chat-vh");root.style.removeProperty("--chat-top")};
+ },[open]);
  useEffect(()=>{if(dialog.current?.open){dialog.current.close();setOpen(false)}setTeaser(false);setMessages(current=>current.length===1&&current[0].id===0?[welcomeFor(pathname)]:current)},[pathname]);
  useEffect(()=>{
   if(open||safeStorage("get"))return;
@@ -29,7 +42,7 @@ export function PatientAssistant(){
  },[open,pathname]);
  function dismissTeaser(){setTeaser(false);safeStorage("set")}
  function acknowledge(){setBadge(false);dismissTeaser()}
- function show(){acknowledge();dialog.current?.show();setOpen(true);window.setTimeout(()=>input.current?.focus({preventScroll:true}),50)}
+ function show(){acknowledge();dialog.current?.show();setOpen(true);if(!window.matchMedia("(pointer:coarse)").matches)window.setTimeout(()=>input.current?.focus({preventScroll:true}),50)}
  function close(){dialog.current?.close();setOpen(false);launcher.current?.focus({preventScroll:true})}
  function reset(){serial.current++;controller.current?.abort();setBusy(false);setLead(null);setMessages([welcomeFor(pathname)]);setQuestion("");setPending("");setError("")}
  function emergency(){close();window.dispatchEvent(new Event("epure:open-emergency"))}

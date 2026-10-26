@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: { default: "Retrouvez le plaisir de sourire — Épure", template: "%s — Épure" },
   description: "Un parcours patient à votre rythme : implants, éclat et alignement du sourire.",
 };
-export const viewport: Viewport = { themeColor: "#282826" };
+export const viewport: Viewport = { themeColor: "#282826", interactiveWidget: "resizes-content" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

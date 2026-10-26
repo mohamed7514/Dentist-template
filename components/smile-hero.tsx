@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import "./smile-hero.css";
 
@@ -13,16 +13,6 @@ const stages = [
 
 export function SmileHero() {
   const root = useRef<HTMLElement>(null);
-  const paused = useRef(false);
-  const playback = useRef<(() => void) | null>(null);
-  const [isPaused, setIsPaused] = useState(false);
-
-  const togglePlayback = () => {
-    paused.current = !paused.current;
-    setIsPaused(paused.current);
-    playback.current?.();
-  };
-
   useLayoutEffect(() => {
     const media = gsap.matchMedia();
     media.add({ motion: "(prefers-reduced-motion: no-preference)", reduced: "(prefers-reduced-motion: reduce)" }, (context) => {
@@ -91,10 +81,9 @@ export function SmileHero() {
       const images = Array.from(section.querySelectorAll<HTMLImageElement>(".smile-photograph > img"));
       const syncPlayback = () => {
         const ready = images.every(image => image.complete && image.naturalWidth > 0);
-        if (inView && ready && !document.hidden && !paused.current) timeline.play();
+        if (inView && ready && !document.hidden) timeline.play();
         else timeline.pause();
       };
-      playback.current = syncPlayback;
       const observer = new IntersectionObserver(([entry]) => {
         inView = entry.isIntersecting;
         syncPlayback();
@@ -106,7 +95,6 @@ export function SmileHero() {
         observer.disconnect();
         document.removeEventListener("visibilitychange", syncPlayback);
         images.forEach(image => image.removeEventListener("load", syncPlayback));
-        playback.current = null;
       };
     }, root);
     return () => media.revert();
@@ -136,22 +124,12 @@ export function SmileHero() {
 
         <div className="smile-story">
         <div className="smile-heading">
-          <p className="smile-eyebrow"><span /> VOTRE SOURIRE. VOTRE RYTHME.</p>
           <h1 id="smile-heading">Le plaisir de sourire,<br /><em>à nouveau.</em></h1>
         </div>
 
           <div className="smile-captions" aria-hidden="true">
             {stages.map((stage, index) => <div className="smile-caption" key={stage.number} data-caption={index}><h2>{stage.title}</h2><p>{stage.text}</p></div>)}
           </div>
-          <div className="smile-progress">
-            <div className="smile-playback">
-              <button className="smile-playback-toggle" type="button" onClick={togglePlayback} aria-label={isPaused ? "Reprendre l’animation du sourire" : "Mettre l’animation du sourire en pause"}>
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">{isPaused ? <path d="M3 1.5 10 6l-7 4.5z" /> : <path d="M2 1h3v10H2zm5 0h3v10H7z" />}</svg>
-                {isPaused ? "Reprendre" : "Pause"}
-              </button>
-            </div>
-          </div>
-          <p className="smile-disclaimer">Transformation fictive à visée illustrative. Aucun résultat de traitement n’est garanti.</p>
         </div>
       </div>
     </section>

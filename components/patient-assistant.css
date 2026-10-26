@@ -83,3 +83,12 @@ html .chat-launcher:hover{animation-play-state:paused;transform:scale(1.08)}
 html .chat-teaser{right:28px;bottom:118px}
 @media(max-width:700px){html .chat-launcher{right:16px;bottom:calc(92px + env(safe-area-inset-bottom));width:68px;height:68px}html .chat-launcher svg{width:31px;height:31px}html .chat-teaser{right:16px;bottom:calc(172px + env(safe-area-inset-bottom))}}
 @media(prefers-reduced-motion:reduce){html .chat-launcher{animation:none}}
+
+/* Phones: full-screen sheet sized to the visible viewport (follows the keyboard, no page shift) */
+html.chat-open,html.chat-open body{overflow:hidden;overscroll-behavior:none}
+.chat-messages{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+@media(max-width:700px){
+ html .chat{inset:var(--chat-top,0px) 0 auto 0;width:100%;max-width:none;height:var(--chat-vh,100dvh);max-height:none;border-radius:0}
+ .chat-header{touch-action:none}
+ .chat-form{padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+}
