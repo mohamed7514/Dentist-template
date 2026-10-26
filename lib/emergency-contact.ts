@@ -6,8 +6,8 @@ export const emergencyContact: {
   hoursLabel: string | null;
   afterHours: { name: string; phone: string } | null;
 } = {
-  phone: null,
-  phoneLabel: null,
+  phone: "819 000 0000",
+  phoneLabel: "819 000 0000",
   hoursLabel: null,
   afterHours: null,
 };

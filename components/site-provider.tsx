@@ -8,10 +8,10 @@ import type {Goal} from "@/lib/journey";
 type InfoKind="eclat"|"alignement"|"privacy";
 export function SiteProvider({children}:{children:ReactNode}){
  const [open,setOpen]=useState(false);
- const [request,setRequest]=useState<{id:number;goal?:Goal}>({id:0});
+ const [request,setRequest]=useState<{id:number;goal?:Goal;timing?:number;prefill?:boolean}>({id:0});
  const [info,setInfo]=useState<InfoKind|null>(null);
  const infoRef=useRef<HTMLDialogElement>(null);
- function start(goal?:Goal){setInfo(null);setRequest(previous=>({id:previous.id+1,goal}));setOpen(true)}
+ function start(goal?:Goal,options?:{timing?:number;prefill?:boolean}){setInfo(null);setRequest(previous=>({id:previous.id+1,goal,timing:options?.timing,prefill:options?.prefill}));setOpen(true)}
  useEffect(()=>{document.body.classList.toggle("dialog-open",open||!!info);return()=>document.body.classList.remove("dialog-open")},[open,info]);
  useEffect(()=>{const dialog=infoRef.current;if(info&&!dialog?.open)dialog?.showModal();else if(!info&&dialog?.open)dialog.close()},[info]);
  const content=info==="eclat"?{eyebrow:"UN SOURIRE PLUS LUMINEUX",title:<>Parlons de l’éclat<br/><em>de votre sourire.</em></>,text:<><p>La couleur de vos dents vous préoccupe ? Une évaluation est un point de départ pour exprimer vos attentes et comprendre les possibilités.</p><p>Le professionnel pourra vous expliquer les options, leurs limites et les coûts avant que vous preniez une décision.</p><p>Vous pouvez préparer votre projet avec ou sans photos.</p></>}:info==="alignement"?{eyebrow:"UN SOURIRE PLUS HARMONIEUX",title:<>Comprendre<br/><em>vos possibilités.</em></>,text:<><p>Vous aimeriez parler de l’alignement de vos dents ? Commencez par ce qui vous gêne ou ce que vous souhaitez comprendre.</p><p>L’évaluation permet de discuter des options, du calendrier et des coûts avec le professionnel.</p><p>Le questionnaire prépare cet échange et ne remplace pas un examen.</p></>}:{

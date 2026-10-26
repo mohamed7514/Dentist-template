@@ -34,7 +34,6 @@ export function SmileHero() {
       const toothRight = section.querySelector(".smile-tooth-right");
       const toothPatches = section.querySelector(".smile-tooth-patches");
       const captions = gsap.utils.toArray<HTMLElement>(".smile-caption", section);
-      const line = section.querySelector(".smile-progress-fill");
       const tabs = Array.from(section.querySelectorAll<HTMLElement>(".smile-step"));
 
       const markStage = (index: number, progress: number) => {
@@ -48,7 +47,6 @@ export function SmileHero() {
         gsap.set(toothPatches, { opacity: 0 });
         gsap.set(captions, { opacity: 0, y: 0 });
         gsap.set(captions[2], { opacity: 1 });
-        gsap.set(line, { scaleX: 1 });
         markStage(2, 1);
         return;
       }
@@ -59,7 +57,6 @@ export function SmileHero() {
       gsap.set(captions, { opacity: 0, y: 14 });
       gsap.set(captions[0], { opacity: 1, y: 0 });
       gsap.set(photograph, { scale: 1.025 });
-      gsap.set(line, { scaleX: 0 });
       markStage(0, 0);
 
       const timeline = gsap.timeline({
@@ -72,7 +69,6 @@ export function SmileHero() {
         },
       });
       timeline
-        .to(line, { scaleX: 1, duration: 5 }, 0)
         .to(photograph, { scale: 1, duration: 3 }, 0)
         .to(toothLeft, { attr: { height: 235 }, duration: 0.9, ease: "power1.inOut" }, 1)
         .to(toothRight, { attr: { height: 235 }, duration: 0.9, ease: "power1.inOut" }, 1.3)
@@ -135,8 +131,7 @@ export function SmileHero() {
               <g clipPath="url(#smile-right-boundary)" mask="url(#smile-right-reveal)"><image href="/assets/smile-final.webp" width="1536" height="1024" /></g>
             </svg>
           </div>
-          <div className="smile-frame-top" aria-hidden="true"><span>UNE HISTOIRE DE SOURIRE</span><span>ÉPURE — 01</span></div>
-
+          
         </div>
 
         <div className="smile-story">
@@ -150,14 +145,11 @@ export function SmileHero() {
           </div>
           <div className="smile-progress">
             <div className="smile-playback">
-              <span aria-hidden="true">Imaginez la suite</span>
               <button className="smile-playback-toggle" type="button" onClick={togglePlayback} aria-label={isPaused ? "Reprendre l’animation du sourire" : "Mettre l’animation du sourire en pause"}>
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">{isPaused ? <path d="M3 1.5 10 6l-7 4.5z" /> : <path d="M2 1h3v10H2zm5 0h3v10H7z" />}</svg>
                 {isPaused ? "Reprendre" : "Pause"}
               </button>
             </div>
-            <div className="smile-progress-track" aria-hidden="true"><span className="smile-progress-fill" /></div>
-            <div className="smile-steps" aria-hidden="true">{stages.map((stage, index) => <span className="smile-step" key={stage.number} data-current={index === 0 ? "" : undefined}><b>{stage.number}</b> {stage.label}</span>)}</div>
           </div>
           <p className="smile-disclaimer">Transformation fictive à visée illustrative. Aucun résultat de traitement n’est garanti.</p>
         </div>

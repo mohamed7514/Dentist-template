@@ -1,0 +1,51 @@
+.implants-page{--implant-green:#4e5b44;--implant-ivory:#fffaf3;--implant-header:92px}
+.implant-cinematic-hero{height:100svh;min-height:740px;position:relative;isolation:isolate;overflow:hidden;background:#262725;color:var(--implant-ivory)}
+.implant-cinematic-media{position:absolute;inset:0 -5% 0 29%;pointer-events:none}
+.implant-cinematic-poster,.implant-cinematic-video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;max-width:none}
+.implant-cinematic-video{opacity:0}
+.implant-cinematic-media[data-ready="true"] .implant-cinematic-video{opacity:1}
+.implant-cinematic-hero[data-reduced="true"] .implant-cinematic-video{visibility:hidden}
+.implant-cinematic-hero:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#262725 0%,#262725ed 15%,#262725a3 33%,#26272510 55%,transparent 75%),linear-gradient(180deg,#191b195e,transparent 22%,transparent 78%,#191b194d)}
+.implant-cinematic-breadcrumb{position:absolute;z-index:2;top:calc(var(--implant-header) + 23px);left:7%;display:flex;gap:10px;align-items:center;font-size:10px;line-height:1.7;color:#d5d5c9;min-height:35px}
+.implant-cinematic-breadcrumb>span{color:#898d7c}
+.implant-cinematic-copy{position:absolute;z-index:2;left:7%;right:42%;bottom:105px}
+.implant-cinematic-eyebrow{display:flex;gap:10px;align-items:center;font-size:9px;letter-spacing:.2em;line-height:1.7;color:#d9d9cb;margin-bottom:20px}
+.implant-cinematic-eyebrow>span{width:5px;height:5px;border-radius:50%;background:#c5c8b3}
+.implants-page .implant-cinematic-copy h1{font-size:clamp(48px,5.1vw,77px);line-height:1.02;font-weight:400;letter-spacing:-.055em;color:#fffaf3;max-width:750px;text-wrap:balance;text-shadow:0 2px 24px #11181035}
+.implant-cinematic-copy h1 em{color:#e9d9bd;font-size:1.035em}
+.implant-cinematic-intro{font-size:14px;line-height:1.85;color:#e2e0d5;margin:23px 0 25px;max-width:370px}
+.implants-page .implant-cinematic-cta{background:#fffaf3;color:#34382e;border-color:#fffaf3;border-radius:3px;min-height:54px;font-size:12px;padding:15px 21px;gap:24px}
+.implants-page .implant-cinematic-cta:hover{background:#e8e5d7;transform:translateY(-2px)}
+.implant-cinematic-playback{position:absolute;z-index:3;top:calc(var(--implant-header) + 22px);right:5%;min-width:88px;min-height:44px;border-radius:28px;display:flex;gap:9px;align-items:center;justify-content:center;padding:8px 13px;border:1px solid #f3f1dc52;background:#2627254d;color:#fffaf3;font-size:11px}
+.implant-cinematic-playback:hover{background:#f4f0df17}
+.implant-cinematic-note{position:absolute;z-index:2;left:7%;right:7%;bottom:23px;padding-top:14px;border-top:1px solid #f4efdf26;color:#c5c5b5;font-size:9px;line-height:1.7}
+.implants-page .implant-faq{padding-top:65px;padding-bottom:55px}
+.implants-page .implant-faq .eyebrow{color:#6e7c5e}
+.implant-faq h2 em{color:var(--implant-green)}
+.implants-page .implant-faq .faq-intro>p:not(.eyebrow){font-size:13px;line-height:1.9}
+.implants-page .implant-faq .faq-list summary{font-size:14px;line-height:1.65;padding-right:5px}
+.implants-page .implant-faq .faq-list details>p{font-size:13px;line-height:1.85}
+@media(max-width:1100px){.implant-cinematic-copy{right:43%;bottom:105px}.implants-page .implant-cinematic-copy h1{font-size:clamp(45px,5.5vw,64px)}.implant-cinematic-media{inset:5% -13% 0 29%}.implant-cinematic-intro{font-size:13px}}
+@media(max-width:900px){.implants-page{--implant-header:80px}.implant-cinematic-copy{left:6%;right:39%}.implant-cinematic-breadcrumb,.implant-cinematic-note{left:6%}.implant-cinematic-media{inset:3% -17% 5% 23%}.implants-page .implant-cinematic-copy h1{font-size:49px}}
+@media(max-width:700px){
+ .implants-page{--implant-header:76px}
+ .implant-cinematic-hero{height:100svh;min-height:760px}
+ .implant-cinematic-media{inset:auto;top:65px;left:-60px;right:-60px;width:calc(100% + 120px);aspect-ratio:1;height:auto}
+ .implant-cinematic-hero:after{background:linear-gradient(180deg,#26272519,transparent 16%,transparent 43%,#262725ba 60%,#262725 77%)}
+ .implant-cinematic-breadcrumb{display:none}
+ .implant-cinematic-playback{right:20px;top:calc(var(--implant-header) + 10px);min-width:76px;min-height:44px;padding:7px 10px;font-size:10px}
+ .implant-cinematic-copy{left:24px;right:24px;bottom:108px}
+ .implant-cinematic-eyebrow{font-size:8px;letter-spacing:.17em;margin-bottom:13px}
+ .implants-page .implant-cinematic-copy h1{font-size:clamp(33px,9.1vw,52px);line-height:1.04;max-width:470px}
+ .implant-cinematic-copy h1 em{font-size:1.04em}
+ .implant-cinematic-intro{font-size:12px;line-height:1.8;margin:16px 0 20px}
+ .implants-page .implant-cinematic-cta{font-size:12px;padding:13px 17px;min-height:49px;gap:18px}
+ .implant-cinematic-note{left:24px;right:24px;bottom:76px;border:0;padding:0;font-size:7px;max-width:305px;line-height:1.6}
+ .implants-page .implant-faq{padding-top:33px;padding-bottom:30px;gap:23px}
+ .implants-page .implant-faq h2{font-size:31px}
+ .implants-page .implant-faq .faq-list summary{font-size:13px}
+ .implants-page .implant-faq .faq-list details>p{font-size:13px}
+ body:has(.implant-cinematic-hero[data-in-view="true"]) .chat-teaser{display:none}
+}
+@media(max-width:360px){.implant-cinematic-copy{left:20px;right:20px;bottom:106px}.implant-cinematic-breadcrumb{left:20px;font-size:7px}.implant-cinematic-media{top:75px;left:-60px;right:-60px}.implant-cinematic-note{left:20px;right:20px;font-size:6px}.implants-page .implant-cinematic-copy h1{font-size:32px}.implant-cinematic-intro{font-size:11px;margin:14px 0 18px}.implants-page .implant-cinematic-cta{font-size:11px;gap:15px;padding:12px 15px}}
+@media(prefers-reduced-motion:reduce){.implant-cinematic-video{display:none}.implant-cinematic-playback{display:none}.implants-page .implant-cinematic-cta{transition:none;transform:none}}

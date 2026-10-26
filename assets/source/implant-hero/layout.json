@@ -1,0 +1,75 @@
+{
+  "canvas": 1080,
+  "fps": 60,
+  "duration": 12.8,
+  "parts": [
+    {
+      "name": "jaw",
+      "original": "exec-af8ce3b8-59d4-41cf-a5b8-1bfd7f7df865.png",
+      "crop": {
+        "left": 126,
+        "top": 93,
+        "width": 1189,
+        "height": 908
+      },
+      "width": 950,
+      "x": 65,
+      "y": 235,
+      "height": 725
+    },
+    {
+      "name": "implant",
+      "original": "exec-ad022e54-e96d-477c-950b-6c69b4e81329.png",
+      "crop": {
+        "left": 317,
+        "top": 146,
+        "width": 395,
+        "height": 1275
+      },
+      "width": 110,
+      "x": 493,
+      "y": 464,
+      "fromY": 34,
+      "start": 0.65,
+      "end": 3.8,
+      "appear": 0.35,
+      "height": 355
+    },
+    {
+      "name": "abutment",
+      "original": "exec-da8b9921-12df-498d-8e50-462d9ac68b00.png",
+      "crop": {
+        "left": 447,
+        "top": 103,
+        "width": 546,
+        "height": 873
+      },
+      "width": 88,
+      "x": 504,
+      "y": 377,
+      "fromY": 175,
+      "start": 4.2,
+      "end": 6.1,
+      "appear": 4,
+      "height": 141
+    },
+    {
+      "name": "crown",
+      "original": "exec-e79c4534-acb7-4e60-8c97-e0356b37bb6a.png",
+      "crop": {
+        "left": 254,
+        "top": 130,
+        "width": 950,
+        "height": 825
+      },
+      "width": 270,
+      "x": 413,
+      "y": 250,
+      "fromY": 40,
+      "start": 6.6,
+      "end": 8.8,
+      "appear": 6.4,
+      "height": 234
+    }
+  ]
+}

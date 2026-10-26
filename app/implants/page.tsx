@@ -1,25 +1,30 @@
-import Image from "next/image";
 import Link from "next/link";
-import { FeatureSpaces } from "@/components/reserved-feature";
-import { Comparison } from "@/components/comparison";
+import { Arrow } from "@/components/icons";
+import { ImplantHero } from "@/components/implant-hero";
+import "./implants.css";
 
-export const metadata = { title: "Implants dentaires · Comprendre vos possibilités" };
+export const metadata = {
+  title: "Implants dentaires · Retrouver le plaisir de sourire",
+  description: "Découvrez les implants dentaires à travers une animation immersive et préparez votre première évaluation.",
+};
+
+const questions = [
+  ["Est-ce qu’un implant convient à tout le monde ?", "La possibilité d’un implant dépend notamment de la santé générale, des gencives et de l’os disponible. Le dentiste doit examiner votre situation pour vous conseiller. Un questionnaire ou des photos ne permettent pas de déterminer votre admissibilité."],
+  ["Est-ce la seule solution pour remplacer une dent ?", "Non. Selon la situation, des ponts ou des prothèses peuvent également être envisagés. L’évaluation permet de discuter des options, de leurs limites et des coûts."],
+  ["Combien de temps peut prendre le traitement ?", "Le traitement peut nécessiter plusieurs visites et une période de guérison de plusieurs mois. Des soins préparatoires peuvent aussi être nécessaires. Le dentiste vous expliquera le calendrier adapté à votre situation."],
+  ["Quel budget dois-je prévoir ?", "Le coût dépend du plan de traitement et des soins nécessaires. Un devis personnalisé permet de comprendre les coûts avant de décider. Aucun prix clinique n’est fixé dans cette démonstration."],
+  ["Je suis inquiet. Puis-je commencer par en parler ?", "Oui. Vos questions et vos hésitations ont leur place dès le premier échange, avant de décider d’un traitement. Vous pouvez également commencer sans envoyer de photos."],
+  ["Que se passe-t-il après ma demande de créneau ?", "La réception doit vérifier le planning puis vous confirmer le rendez-vous ou proposer un autre créneau. Aucun rendez-vous réel n’est réservé depuis ce site modèle."],
+] as const;
 
 export default function Page() {
- return (
-<main id="main">
-<section className="implant-hero wrap"><Link className="breadcrumb" href="/#soins">← Nos soins / Implants dentaires</Link><div className="implant-hero-grid"><div><p className="eyebrow">UNE DENT MANQUANTE. UNE ENVIE D’AVANCER.</p><h1>Retrouver<br />un sourire<br /><em>qui vous ressemble.</em></h1><p className="hero-intro">Vous pensez à un implant ? Prenons d’abord le temps de comprendre votre situation et les options à discuter.</p><Link href="/rendez-vous/" className="btn">Préparer mon évaluation <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></Link><Link className="hero-secondary" href="#comprendre">Comprendre les implants <span>↓</span></Link><p className="small-note">Un premier échange, avant toute décision de traitement.</p></div><div className="implant-image"><Image src="/assets/hero.png" alt="Portrait souriant illustratif, sans lien avec un traitement réel" width={1122} height={1402} priority /><span>VOTRE SOURIRE. VOTRE RYTHME.</span></div></div></section>
-<section className="implant-understand wrap" id="comprendre"><div><p className="eyebrow">COMPRENDRE, SIMPLEMENT.</p><h2>Un point d’appui.<br /><em>Pour une dent de remplacement.</em></h2><p>Un implant est une racine artificielle placée dans l’os de la mâchoire pour soutenir une dent de remplacement. Il fait partie des possibilités à évaluer lorsqu’une dent manque.</p><p>Votre santé buccodentaire et votre situation déterminent les options à considérer. Le choix se fait après un examen avec le dentiste.</p><a className="source-link" href="https://www.cda-adc.ca/fr/pour-le-public/comprendre-votre-sante-buccodentaire/procdures-dentaires/implants-dentaires" target="_blank" rel="noopener">En savoir plus · Association dentaire canadienne ↗</a></div><div className="implant-questions"><p className="eyebrow">VOTRE POINT DE DÉPART</p><h3>Qu’aimeriez-vous<br />remplacer ?</h3><Link href="/rendez-vous/"><span>Une dent manquante</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></Link><Link href="/rendez-vous/"><span>Plusieurs dents</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></Link><Link href="/rendez-vous/"><span>Je souhaite comprendre mes options</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></Link><p>Une question suffit pour commencer.</p></div></section>
-<section className="path-section"><div className="wrap"><p className="eyebrow">UNE ÉVALUATION POUR VOUS ÉCLAIRER.</p><h2>Avant de décider,<br /><em>trois conversations utiles.</em></h2><div className="path-grid"><article><span className="step-number">01</span><h3>Votre situation.</h3><p>Un examen permet au dentiste d’étudier vos dents, vos gencives et l’os de votre mâchoire.</p></article><article><span className="step-number">02</span><h3>Vos possibilités.</h3><p>Les implants, les autres options, les étapes et les limites sont discutés selon les résultats de l’évaluation.</p></article><article><span className="step-number">03</span><h3>Votre décision.</h3><p>Vous prenez connaissance du plan proposé et des coûts avant de choisir la suite.</p></article></div><p className="clinical-note">Le parcours et sa durée varient selon la situation. Un questionnaire en ligne ne permet pas de déterminer si un implant est indiqué.</p></div></section>
-<section className="preview-section wrap"><div className="preview-copy"><p className="eyebrow">EXPLORER UNE POSSIBILITÉ.</p><h2>Un aperçu pour<br /><em>parler de vos attentes.</em></h2><p>Une illustration peut ouvrir la discussion. L’évaluation clinique permettra ensuite de comprendre les possibilités réelles.</p><Link href="/rendez-vous/" className="btn">Commencer mon projet <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></Link><p className="medical-note">Exemple fictif. Cet aperçu ne prédit pas un résultat et ne représente pas un traitement réel.</p></div><div className="preview-visual"><Comparison id="implant-range" /><div className="comparison-caption"><span>AVANT / APERÇU INDICATIF</span><span>Images fictives</span></div></div></section>
-<FeatureSpaces/>
-<section className="faq-section wrap" id="questions"><div className="faq-intro"><p className="eyebrow">DES QUESTIONS NORMALES.</p><h2>Le temps<br /><em>de comprendre.</em></h2><p>Chaque sourire a son histoire.<br />Votre évaluation commence par la vôtre.</p><Link href="/rendez-vous/" className="text-link">Préparer mon évaluation <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></Link></div><div className="faq-list">
-<details><summary>Est-ce qu’un implant convient à tout le monde ?<span>+</span></summary><p>La possibilité d’un implant dépend notamment de la santé générale, des gencives et de l’os disponible. Le dentiste doit examiner votre situation pour vous conseiller. Les photos et ce questionnaire ne permettent pas de déterminer votre admissibilité.</p></details>
-<details><summary>Est-ce la seule solution pour remplacer une dent ?<span>+</span></summary><p>Non. Selon la situation, des ponts ou des prothèses peuvent également être envisagés. L’évaluation permet de discuter des options, de leurs limites et des coûts.</p></details>
-<details><summary>Combien de temps peut prendre le traitement ?<span>+</span></summary><p>La pose d’un implant peut nécessiter plusieurs visites et une période de guérison de plusieurs mois. Le calendrier adapté à votre situation sera expliqué par le dentiste.</p></details>
-<details><summary>Quel budget dois-je prévoir ?<span>+</span></summary><p>Le coût dépend du plan de traitement et des soins nécessaires. Aucun prix clinique n’est fixé dans cette démonstration. Vous pouvez sélectionner « J’ai besoin d’un devis » pour préparer vos questions.</p></details>
-<details><summary>Je suis inquiet. Puis-je commencer par en parler ?<span>+</span></summary><p>Oui. Vous pouvez indiquer vos questions et vos hésitations lors de l’évaluation, avant de décider d’un traitement. Vous pouvez également commencer sans envoyer de photos.</p></details>
-<details><summary>Que se passe-t-il après ma demande de créneau ?<span>+</span></summary><p>La réception doit vérifier le planning puis vous confirmer le rendez-vous ou proposer un autre créneau. Aucun rendez-vous réel n’est réservé depuis ce site modèle.</p></details>
-</div></section></main>
- );
+  return <main id="main" className="implants-page">
+    <ImplantHero />
+
+
+    <section className="faq-section implant-faq wrap" id="questions" aria-labelledby="implant-faq-heading">
+      <div className="faq-intro"><p className="eyebrow">DES QUESTIONS NORMALES.</p><h2 id="implant-faq-heading">Le temps<br /><em>de comprendre.</em></h2><p>Chaque sourire a son histoire.<br />Voici quelques premiers repères pour la suite.</p><Link href="/rendez-vous/" className="text-link">Parler de mon projet <Arrow /></Link></div>
+      <div className="faq-list">{questions.map(([question, answer]) => <details key={question}><summary>{question}<span aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div>
+    </section>
+  </main>;
 }

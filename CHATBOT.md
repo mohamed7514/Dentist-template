@@ -1,6 +1,6 @@
 # Assistant Épure
 
-La bulle est disponible sur les neuf pages. Elle conserve la conversation en mémoire pendant la navigation et propose des liens fixes vers les soins, les photos, SmilePreview et la demande de rendez-vous. Rechargement et « Recommencer » effacent la discussion. Aucun historique persistant, accès aux photos, dossier patient ou envoi du formulaire n’est ajouté.
+La bulle est disponible sur les neuf pages. Elle conserve la conversation en mémoire pendant la navigation et propose des liens fixes vers les soins, les photos et la demande de rendez-vous. Rechargement et « Recommencer » effacent la discussion. Aucun historique persistant, accès aux photos, dossier patient ou envoi du formulaire n’est ajouté.
 
 ## État de cette version
 
@@ -9,6 +9,14 @@ L’export Sites publié reste statique. Il propose **un guide interactif claire
 Le serveur local (`npm start`) prend en charge `/api/chat/status.json` et `/api/chat`, en plus de l’export Next.js. S’il reçoit `OPENAI_API_KEY` via son environnement serveur, il active automatiquement l’interface IA. Ne jamais ajouter cette variable à `NEXT_PUBLIC_*`, aux sources, aux arguments de commande ou au navigateur. Le modèle par défaut est `gpt-4.1-mini-2025-04-14`, remplaçable via `OPENAI_MODEL`.
 
 Pour activer OpenAI sur Sites : connecter OpenAI Developers et suivre le workflow `openai-platform-api-key` avec son approbation, configurer le secret de Site, puis migrer l’hébergement statique vers un Worker compatible avec les actifs Next.js. Le module `server/assistant.mjs` utilise les API Web Request/Response et peut être repris par cet adaptateur. Conserver l’identité et l’audience du Site. **Configurer le secret seul n’ajoute pas de serveur à l’export statique.** Cette migration n’a pas été faite dans cette version sans clé.
+
+## Parcours et boutons
+
+Trois choix dès l’ouverture : **Prendre rendez-vous** (ouvre directement la demande, sans IA), **J’ai un problème ou une question** (le visiteur écrit, l’assistant l’oriente vers un soin) et **Découvrir un soin** (implants, blanchiment, alignement). `server/lead-process.mjs` décide des boutons, pas le modèle : au maximum 2 par réponse, « Prendre rendez-vous » (pré-rempli avec le soin compris) et le lien vers la page du soin. Une demande explicite ou un « oui » affiche toujours le bouton ; les propositions spontanées se limitent à la première identification du soin et à une relance après 3 échanges, 2 au maximum. Le modèle ne propose pas de rendez-vous dans son texte. L’état (soin, tours, lien déjà montré, propositions) est renvoyé par le navigateur et validé côté serveur ; rien n’est stocké. Tests : `npm run test:assistant`.
+
+## Activer l’IA
+
+Copier `.env.example` en `.env.local`, renseigner `OPENAI_API_KEY`, puis `npm run build && npm start`. `next dev` ne sert pas `/api/chat` (export statique).
 
 ## Comportement IA préparé
 
@@ -26,6 +34,6 @@ Pour activer OpenAI sur Sites : connecter OpenAI Developers et suivre le workflo
 
 `npm run test:assistant` : configuration, consentement, origine, validation et taille, retrait des coordonnées usuelles, requête Responses, sortie structurée, urgences, limites, erreurs et délais. Aucune clé réelle n’est utilisée par les tests.
 
-`node tools/chat-check.mjs` depuis `C:/Dev/dentist`, export servi sur le port 3090 : parcours guidé, liens, urgence, clavier, tailles desktop/mobile et mode IA simulé avec accord, historique, erreur et effacement.
+`node tools/chat-conversion-check.mjs` (boutons, réponses rapides, consentement, barre de conversion, bulle) puis `node tools/chat-check.mjs` depuis `C:/Dev/dentist`, export servi sur le port 3090 : parcours guidé, liens, urgence, clavier, tailles desktop/mobile et mode IA simulé avec accord, historique, erreur et effacement.
 
 Documentation : [Responses API](https://developers.openai.com/api/docs/guides/text), [sorties structurées](https://developers.openai.com/api/docs/guides/structured-outputs), [modèle](https://developers.openai.com/api/docs/models/gpt-4.1-mini).

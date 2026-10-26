@@ -34,7 +34,7 @@ Next.js génère un export dans `out/` pour l’hébergement actuel. `npm start`
 - `app/soins/`, `app/blanchiment/`, `app/alignement/` : catalogue et pages de services.
 - `app/clinique/` : présentation et espaces réservés à l’équipe et aux coordonnées.
 - `app/photos-guidees/` : capture guidée active, caméra ou galerie, deux photos conseillées et profil facultatif, récapitulatif et suppression.
-- `app/smile-preview/`, `app/rendez-vous/` : espaces réservés aux prochaines fonctionnalités.
+- `app/rendez-vous/` : espace réservé aux prochaines fonctionnalités.
 - `components/photo-capture.tsx`, `components/photo-session.tsx` : préparation locale des images et conservation en mémoire pendant la navigation Next.js. Les fichiers sont redimensionnés à 1600 px maximum et réencodés en JPEG sans envoi réseau. Formats photos lisibles par le navigateur, 12 Mo maximum ; HEIC/HEIF affichent un message de remplacement si le navigateur ne peut pas les lire. La caméra est arrêtée à la sortie, au changement d’angle ou quand la page est masquée. Les photos disparaissent au rechargement. La page rendez-vous montre un récapitulatif local ; elle ne transmet aucun fichier.
 - `components/reserved-feature.tsx`, `components/feature-page.tsx`, `app/site-pages.css` : gabarit partagé des espaces réservés et nouvelles pages.
 - `app/layout.tsx` : structure partagée et métadonnées.
@@ -49,7 +49,7 @@ Les pages sont des composants React avec de vraies routes Next.js. Le parcours u
 
 ## Parcours et limites
 
-Le site comporte neuf pages publiques. `/photos-guidees/` permet la capture locale et `/rendez-vous/` propose un parcours interactif : urgence ou consultation, besoin/échéance/budget facultatif, date et période souhaitées, coordonnées, récapitulatif modifiable et fin de simulation. Les disponibilités ne sont pas présentées comme réelles. Le formulaire ne transmet rien et n’effectue aucune réservation. Les confirmations et rappels restent à connecter ; SmilePreview reste illustratif.
+Le site comporte neuf pages publiques. `/photos-guidees/` permet la capture locale et `/rendez-vous/` propose un parcours interactif : urgence ou consultation, besoin/échéance/budget facultatif, date et période souhaitées, coordonnées, récapitulatif modifiable et fin de simulation. Les disponibilités ne sont pas présentées comme réelles. Le formulaire ne transmet rien et n’effectue aucune réservation. Les confirmations et rappels restent à connecter.
 
 La réservation utilise un écran centré avec une question à la fois. Les choix de besoin, échéance et budget avancent directement ; le budget peut être passé. La date se choisit dans un calendrier, puis une période de la journée. Les champs facultatifs sont repliés. La navigation et le pied de page marketing sont remplacés, sur cette route uniquement, par un accès au site et un accès d’urgence. La progression comporte quatre phases et les corrections du récapitulatif reviennent directement à la vérification.
 

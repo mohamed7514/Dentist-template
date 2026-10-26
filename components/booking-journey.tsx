@@ -7,13 +7,13 @@ import {usePhotoSession} from "./photo-session";
 import {useBookingSession,type BookingDraft} from "./booking-session";
 import "./booking-journey.css";
 
-const needs=["Remplacer une dent","Éclaircir mon sourire","Aligner mes dents","Un examen ou un autre besoin","Je ne sais pas encore"];
+const needs=["Implants dentaires"];
 const timings=["Dès que possible","Dans les 3 prochains mois","Je prends le temps de me renseigner"];
+const insurances=["Oui, j’en ai une","Non","Je ne sais pas"];
 const budgets=["J’ai besoin d’un devis","Moins de 5 000 $","5 000 à 10 000 $","Plus de 10 000 $"];
 const periods=["Le matin","L’après-midi","Peu importe"];
 const stages=["Votre besoin","Votre visite","Vos coordonnées","Vérification"];
-const titles=["Quel est votre besoin ?","Quand aimeriez-vous commencer ?","Un budget en tête ?","Quel jour vous conviendrait ?","Comment vous joindre ?","Tout est bon pour vous ?"];
-const hints=["Choisissez ce qui vous correspond.","Choisissez votre rythme.","Facultatif. Vous pourrez en parler au cabinet.","Votre préférence sera confirmée par la réception.","Pour cet essai, utilisez des coordonnées fictives.","Vérifiez vos informations avant de terminer l’essai."];
+const titles=["Quel est votre besoin ?","Quand ?","Une assurance dentaire ?","Votre budget ?","Quel jour ?","Comment vous joindre ?","Tout est bon ?"];
 
 function localDate(date:Date){return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`}
 function displayDate(value:string){return value?new Date(value+"T12:00:00").toLocaleDateString("fr-CA",{weekday:"long",day:"numeric",month:"long"}):"Date à choisir"}
@@ -46,7 +46,7 @@ export function BookingJourney(){
  const card=useRef<HTMLElement>(null);
  const heading=useRef<HTMLHeadingElement>(null);
  const interacted=useRef(false);
- const group=step<=2?0:step===3?1:step===4?2:3;
+ const group=step<=3?0:step===4?1:step===5?2:3;
  useEffect(()=>{const today=new Date().toLocaleDateString("en-CA",{timeZone:"America/Toronto"});const tomorrow=new Date(today+"T12:00:00");tomorrow.setDate(tomorrow.getDate()+1);setMinimum(localDate(tomorrow))},[]);
  useEffect(()=>{
   if(!interacted.current)return;
@@ -55,45 +55,44 @@ export function BookingJourney(){
  },[step]);
  function update(key:keyof BookingDraft,value:string){setDraft(current=>({...current,[key]:value}));setError("")}
  function go(next:number){interacted.current=true;setError("");setStep(next)}
- function answer(key:keyof BookingDraft,value:string){update(key,value);go(editing?5:step+1);setEditing(false)}
+ function answer(key:keyof BookingDraft,value:string){update(key,value);go(editing?6:step+1);setEditing(false)}
  function edit(next:number){setEditing(true);go(next)}
- function back(){setEditing(false);go(editing?5:step-1)}
+ function back(){setEditing(false);go(editing?6:step-1)}
  function advance(event:FormEvent<HTMLFormElement>){
   event.preventDefault();
-  if(step===3&&(!draft.date||draft.date<minimum||!draft.period)){setError("Choisissez un jour et un moment de la journée.");return}
-  if(step===4){
+  if(step===4&&(!draft.date||draft.date<minimum||!draft.period)){setError("Choisissez un jour et un moment de la journée.");return}
+  if(step===5){
    const digits=draft.phone.replace(/\D/g,"");
    if(!draft.firstName.trim()||!draft.lastName.trim()){setError("Ajoutez votre prénom et votre nom.");return}
    if(!/^\+?[\d().\s-]+$/.test(draft.phone.trim())||!/^(?:1)?\d{10}$/.test(digits)||(draft.phone.trim().startsWith("+")&&!(digits.length===11&&digits.startsWith("1")))){setError("Vérifiez le téléphone : 10 chiffres, avec ou sans +1.");return}
   }
-  if(step===5&&(!draft.need||!draft.timing||!draft.date||draft.date<minimum||!draft.period||!draft.firstName.trim()||!draft.lastName.trim()||!draft.phone)){setError("Votre demande est incomplète. Vérifiez les étapes précédentes.");return}
-  go(editing?5:step+1);setEditing(false);
+  if(step===6&&(!draft.need||!draft.timing||!draft.date||draft.date<minimum||!draft.period||!draft.firstName.trim()||!draft.lastName.trim()||!draft.phone)){setError("Votre demande est incomplète. Vérifiez les étapes précédentes.");return}
+  go(editing?6:step+1);setEditing(false);
  }
  function choice(options:string[],key:keyof BookingDraft){return <div className={`booking-options${key==="need"?" booking-options-needs":""}`} role="group" aria-label={titles[step]}>{options.map((option,index)=><button type="button" className={`booking-option${draft[key]===option?" is-selected":""}`} key={option} data-answer={option} aria-pressed={draft[key]===option} onClick={()=>answer(key,option)}>{key==="need"&&<span className="booking-option-icon"><JourneyIcon kind={index}/></span>}<span>{option}</span><Arrow/></button>)}</div>}
  function photoRow(){return <div className="booking-photo-row"><div className="booking-photo-label">{photoCount>0&&<span className="booking-photo-thumbs">{photos.map((photo,index)=>photo&&<img key={index} src={photo.url} alt={`Photo ${index+1} préparée`}/>)}</span>}<span>{photoCount?`${photoCount} photo${photoCount>1?"s":""} préparée${photoCount>1?"s":""}`:"Des photos à ajouter ?"}<small>{photoCount?"Sur cet appareil uniquement":"Facultatif"}</small></span></div><Link href="/photos-guidees/">{photoCount?"Voir":"Ajouter"} <span aria-hidden="true">↗</span></Link></div>}
  return <div className="booking-container">
   <article className={`booking-card${step===-1?" booking-card-entry":""}`} ref={card}>
-   {step>=0&&step<6&&<div className="booking-navigation"><div><button type="button" className="booking-back" data-booking-back onClick={back}>← Retour</button><span>{group+1}/4 <b>· {stages[group]}</b></span></div><div className="booking-progress" role="progressbar" aria-label={stages[group]} aria-valuemin={1} aria-valuemax={4} aria-valuenow={group+1}>{stages.map((label,index)=><span key={label} className={index<=group?"active":""}/>)}</div></div>}
+   {step>=0&&step<7&&<div className="booking-navigation"><div><button type="button" className="booking-back" data-booking-back onClick={back}>← Retour</button><span>{group+1}/4 <b>· {stages[group]}</b></span></div><div className="booking-progress" role="progressbar" aria-label={stages[group]} aria-valuemin={1} aria-valuemax={4} aria-valuenow={group+1}>{stages.map((label,index)=><span key={label} className={index<=group?"active":""}/>)}</div></div>}
    <div className="booking-stage" key={step}>
     {step===-1?<>
-     <p className="booking-eyebrow">VOTRE PREMIÈRE VISITE</p><h1 ref={heading} tabIndex={-1}>De quoi avez-vous<br/><em>besoin ?</em></h1><p className="booking-hint">Choisissez une option pour commencer.</p>
-     <div className="booking-entry"><button type="button" data-booking-consultation onClick={()=>go(0)}><span className="booking-entry-icon"><JourneyIcon/></span><strong>Une consultation</strong><span className="booking-entry-description">Préparer ma première visite</span><span className="booking-entry-action">Commencer <Arrow/></span></button><button type="button" data-booking-urgent onClick={openEmergency}><span className="booking-entry-icon"><JourneyIcon kind={5}/></span><strong>Une urgence</strong><span className="booking-entry-description">Contacter la clinique directement</span><span className="booking-entry-action">Voir les contacts <Arrow/></span></button></div>
-    </>:step===6?<div className="booking-complete"><span className="booking-complete-icon" aria-hidden="true">✓</span><p className="booking-eyebrow">SIMULATION TERMINÉE</p><h1 ref={heading} tabIndex={-1}>C’est tout.<br/><em>Simplement.</em></h1><p className="booking-hint">Aucune demande envoyée. Aucun rendez-vous réservé.</p><div className="booking-complete-date"><strong>{displayDate(draft.date)}</strong><span>{draft.period} · Préférence simulée</span></div><p className="booking-confirmation-note">Avec le service connecté, la réception vous contactera pour confirmer.</p><Link href="/" className="booking-primary">Retour au site <Arrow/></Link><button type="button" className="booking-text-button" onClick={()=>go(5)}>Revoir mes informations</button></div>:<>
-     <h1 ref={heading} tabIndex={-1}>{titles[step]}</h1><p className="booking-hint">{hints[step]}</p>
-     {step===0?choice(needs,"need"):step===1?choice(timings,"timing"):step===2?<>{choice(budgets,"budget")}<button type="button" className="booking-skip" onClick={()=>answer("budget","")}>Passer cette question <Arrow/></button><p className="booking-price-note">Ces budgets ne sont pas des tarifs de soins.</p></>:<form onSubmit={advance} onInvalidCapture={event=>{if(event.target instanceof HTMLElement)event.target.closest("details")?.setAttribute("open","")}}>
-      {step===3?<div className="booking-date-choice"><Calendar value={draft.date} minimum={minimum} onChange={value=>update("date",value)}/><fieldset className="booking-periods"><legend>À quel moment ?</legend><div>{periods.map(period=><label key={period} className={draft.period===period?"selected":""}><input type="radio" name="period" value={period} checked={draft.period===period} onChange={()=>update("period",period)}/>{period}</label>)}</div></fieldset><p className="booking-date-summary" aria-live="polite">{draft.date?`${displayDate(draft.date)}${draft.period?` · ${draft.period}`:""}`:"Choisissez un jour dans le calendrier."}</p></div>:step===4?<>
+     <h1 ref={heading} tabIndex={-1}>De quoi avez-vous<br/><em>besoin ?</em></h1>
+     <div className="booking-entry"><button type="button" data-booking-consultation onClick={()=>go(0)}><span className="booking-entry-icon"><JourneyIcon/></span><strong>Une consultation</strong><span className="booking-entry-action">Commencer <Arrow/></span></button><button type="button" data-booking-urgent onClick={openEmergency}><span className="booking-entry-icon"><JourneyIcon kind={5}/></span><strong>Une urgence</strong><span className="booking-entry-action">Voir les contacts <Arrow/></span></button></div>
+    </>:step===7?<div className="booking-complete"><span className="booking-complete-icon" aria-hidden="true">✓</span><h1 ref={heading} tabIndex={-1}>Demande <em>envoyée.</em></h1><div className="booking-complete-date"><strong>{displayDate(draft.date)}</strong><span>{draft.period}</span></div><p className="booking-confirmation-note">La réception vous confirme le rendez-vous.</p><Link href="/" className="booking-primary">Retour au site <Arrow/></Link><button type="button" className="booking-text-button" onClick={()=>go(6)}>Revoir</button></div>:<>
+     <h1 ref={heading} tabIndex={-1}>{titles[step]}</h1>
+     {step===0?choice(needs,"need"):step===1?choice(timings,"timing"):step===2?choice(insurances,"insurance"):step===3?<>{choice(budgets,"budget")}<button type="button" className="booking-skip" onClick={()=>answer("budget","")}>Passer <Arrow/></button></>:<form onSubmit={advance} onInvalidCapture={event=>{if(event.target instanceof HTMLElement)event.target.closest("details")?.setAttribute("open","")}}>
+      {step===4?<div className="booking-date-choice"><Calendar value={draft.date} minimum={minimum} onChange={value=>update("date",value)}/><fieldset className="booking-periods" aria-label="Moment de la journée"><div>{periods.map(period=><label key={period} className={draft.period===period?"selected":""}><input type="radio" name="period" value={period} checked={draft.period===period} onChange={()=>update("period",period)}/>{period}</label>)}</div></fieldset><p className="booking-date-summary" aria-live="polite">{draft.date?`${displayDate(draft.date)}${draft.period?` · ${draft.period}`:""}`:"Choisissez un jour."}</p></div>:step===5?<>
        <div className="booking-fields"><label>Prénom<input name="firstName" autoComplete="given-name" maxLength={80} required value={draft.firstName} onChange={event=>update("firstName",event.target.value)}/></label><label>Nom<input name="lastName" autoComplete="family-name" maxLength={80} required value={draft.lastName} onChange={event=>update("lastName",event.target.value)}/></label><label className="booking-field-wide">Téléphone<input name="phone" type="tel" inputMode="tel" autoComplete="tel" maxLength={25} required placeholder="514 555-0123" value={draft.phone} onChange={event=>update("phone",event.target.value)}/></label></div>
-       <details className="booking-extra" open={!!draft.email||!!draft.note||undefined}><summary>Ajouter un courriel ou une question <span>Facultatif</span></summary><div className="booking-fields"><label className="booking-field-wide">Courriel<input name="email" type="email" autoComplete="email" maxLength={254} value={draft.email} onChange={event=>update("email",event.target.value)}/></label><label className="booking-field-wide">Votre question<textarea name="note" rows={2} maxLength={500} value={draft.note} onChange={event=>update("note",event.target.value)} placeholder="Évitez les renseignements médicaux sensibles."/></label></div></details>
-       {photoRow()}
+       <details className="booking-extra" open={!!draft.email||!!draft.note||undefined}><summary>Courriel ou question <span>Facultatif</span></summary><div className="booking-fields"><label className="booking-field-wide">Courriel<input name="email" type="email" autoComplete="email" maxLength={254} value={draft.email} onChange={event=>update("email",event.target.value)}/></label><label className="booking-field-wide">Votre question<textarea name="note" rows={2} maxLength={500} value={draft.note} onChange={event=>update("note",event.target.value)}/></label></div></details>
       </>:<>
-       <div className="booking-recap"><section><div><span>Votre besoin</span><button type="button" onClick={()=>edit(0)}>Modifier</button></div><strong>{draft.need}</strong><p>{draft.timing}</p><div className="booking-budget-recap"><span>Budget : {draft.budget||"à discuter"}</span><button type="button" onClick={()=>edit(2)}>Modifier</button></div><button type="button" className="booking-edit-timing" onClick={()=>edit(1)}>Modifier l’échéance</button></section><section><div><span>Votre préférence</span><button type="button" onClick={()=>edit(3)}>Modifier</button></div><strong>{displayDate(draft.date)}</strong><p>{draft.period} · Heure de Montréal</p><small>À confirmer par la réception.</small></section><section><div><span>Vos coordonnées</span><button type="button" onClick={()=>edit(4)}>Modifier</button></div><strong>{draft.firstName.trim()} {draft.lastName.trim()}</strong><p>{draft.phone}</p>{draft.email&&<p>{draft.email}</p>}{draft.note&&<p className="booking-recap-note">{draft.note}</p>}</section></div>{photoRow()}{photoCount>0&&<button type="button" className="booking-remove-photos" onClick={clear}>Retirer les photos</button>}
+       <div className="booking-recap"><section><div><span>Votre besoin</span><button type="button" onClick={()=>edit(0)}>Modifier</button></div><strong>{draft.need}</strong><p>{draft.timing}</p><div className="booking-budget-recap"><span>Budget : {draft.budget||"à discuter"}</span><button type="button" onClick={()=>edit(3)}>Modifier</button></div><div className="booking-budget-recap"><span>Assurance : {draft.insurance||"non précisée"}</span><button type="button" onClick={()=>edit(2)}>Modifier</button></div><button type="button" className="booking-edit-timing" onClick={()=>edit(1)}>Modifier</button></section><section><div><span>Votre préférence</span><button type="button" onClick={()=>edit(4)}>Modifier</button></div><strong>{displayDate(draft.date)}</strong><p>{draft.period}</p></section><section><div><span>Vos coordonnées</span><button type="button" onClick={()=>edit(5)}>Modifier</button></div><strong>{draft.firstName.trim()} {draft.lastName.trim()}</strong><p>{draft.phone}</p>{draft.email&&<p>{draft.email}</p>}{draft.note&&<p className="booking-recap-note">{draft.note}</p>}</section></div>
       </>}
       {error&&<p className="booking-error" role="alert">{error}</p>}
-      <div className="booking-actions"><button className="booking-primary" type="submit" disabled={step===3&&(!draft.date||!draft.period||draft.date<minimum)}>{editing?"Enregistrer la modification":step===5?"Terminer l’essai":step===4?"Vérifier mes informations":"Continuer"}<Arrow/></button></div>
+      <div className="booking-actions"><button className="booking-primary" type="submit" disabled={step===4&&(!draft.date||!draft.period||draft.date<minimum)}>{editing?"Enregistrer la modification":step===6?"Envoyer ma demande":"Continuer"}<Arrow/></button></div>
      </form>}
     </>}
    </div>
   </article>
-  <div className="booking-bottom"><p><span aria-hidden="true">◌</span> Démonstration · Aucun envoi ni réservation réelle.</p>{step>=0&&step<6&&<button type="button" onClick={openEmergency}>Une urgence ?</button>}</div>
+  <div className="booking-bottom"><p><span aria-hidden="true">◌</span> Démonstration · rien n’est envoyé.</p>{step>=0&&step<7&&<button type="button" onClick={openEmergency}>Une urgence ?</button>}</div>
  </div>;
 }

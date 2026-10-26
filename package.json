@@ -3,16 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --hostname 127.0.0.1",
+    "dev": "next dev",
     "build": "next build --webpack",
-    "start": "node scripts/preview.mjs",
+    "start": "next start",
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck",
-    "test:assistant": "node --test server/assistant.test.mjs"
+    "test:assistant": "node --test server/assistant.test.mjs server/lead-process.test.mjs"
   },
   "dependencies": {
     "gsap": "^3.15.0",
-    "next": "16.4.0",
+    "next": "16.4.3",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },

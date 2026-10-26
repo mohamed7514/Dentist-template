@@ -84,9 +84,9 @@ export function PhotoCapture(){
  return <section className="capture-workspace wrap" aria-label="Prise de photos guidée">
   <div className="capture-stepper" aria-label="Angles de prise de vue">{guides.map((item,i)=><button type="button" key={item.label} onClick={()=>move(i)} disabled={busy} aria-current={!review&&index===i?"step":undefined} className={photos[i]?"has-photo":""}><span>{photos[i]?<Check/>:`0${i+1}`}</span><div>{item.label}<small>{i===2?"Facultatif":photos[i]?"Photo ajoutée":"Photo conseillée"}</small></div></button>)}</div>
   {review?<div className="capture-review">
-    <div className="capture-review-heading"><div><p className="eyebrow">LE TEMPS DE VÉRIFIER.</p><h2 ref={headingRef} tabIndex={-1}>Vos photos.<br/><em>À votre rythme.</em></h2></div><p>Une image à refaire ? Vous pouvez la remplacer.<br/>Aucune photo n’a été envoyée.</p></div>
+    <div className="capture-review-heading"><div><h2 ref={headingRef} tabIndex={-1}>Vos photos.<br/><em>À votre rythme.</em></h2></div></div>
     <div className="capture-review-grid">{guides.map((item,i)=><article key={item.label}><div className="capture-review-image">{photos[i]?<img src={photos[i]!.url} alt={`Votre photo : ${item.label}`}/>:<PhotoGuide index={i}/>}<span>{photos[i]?"PHOTO AJOUTÉE":"FACULTATIF"}</span></div><h3>{item.label}</h3><div><button type="button" onClick={()=>move(i)}>{photos[i]?"Vérifier ou remplacer":"Ajouter le profil"} <Arrow/></button>{photos[i]&&<button className="capture-remove" type="button" aria-label={`Supprimer la photo ${item.label}`} onClick={()=>{replace(i,null);move(i)}}>Supprimer</button>}</div></article>)}</div>
-    <div className="capture-review-footer"><div><strong>{count} photo{count>1?"s":""} préparée{count>1?"s":""}.</strong><p>Elles restent sur cet appareil pendant votre navigation. Recharger la page les efface.</p></div><Link className="btn" href="/rendez-vous/">Préparer mon rendez-vous <Arrow/></Link><button className="capture-clear" type="button" onClick={()=>{clear();move(0)}}>Tout effacer</button></div>
+    <div className="capture-review-footer"><div><strong>{count} photo{count>1?"s":""} préparée{count>1?"s":""}.</strong></div><Link className="btn" href="/rendez-vous/">Préparer mon rendez-vous <Arrow/></Link><button className="capture-clear" type="button" onClick={()=>{clear();move(0)}}>Tout effacer</button></div>
   </div>:<div className={`capture-layout${live||photo||index===2?" capture-active":""}`}>
    <div className="capture-view"><div ref={viewRef} className={`capture-frame${live?" is-live":""}${photo&&!live?" has-image":""}`}>
     {live?<video ref={videoRef} autoPlay muted playsInline onCanPlay={()=>setVideoReady(true)}/>:photo?<img src={photo.url} alt={`Votre photo : ${guide.label}`}/>:<div className="capture-empty"><PhotoGuide index={index}/><span>UN REPÈRE POUR VOUS GUIDER</span></div>}
@@ -96,14 +96,14 @@ export function PhotoCapture(){
     <span className="capture-frame-label">{guide.label}{index===2?" · facultatif":""}</span>
     {live&&<div className="capture-mobile-actions"><button type="button" data-capture-mobile-shutter disabled={busy||!videoReady} onClick={()=>{if(videoRef.current)void ingest(videoRef.current)}}><Camera/>{busy?"Préparation…":"Prendre la photo"}</button><button type="button" aria-label="Fermer la caméra" disabled={busy} onClick={stopCamera}>×</button></div>}
     {!live&&photo&&<div className="capture-mobile-actions"><button type="button" disabled={busy||cameraPending||(index===2&&!ready)} onClick={()=>index<2?move(index+1):showReview()}>{index===2?"Vérifier mes photos":"Continuer"}<Arrow/></button></div>}
-   </div><div className="capture-under-frame"><Lock/><span>Vos photos restent sur votre appareil. Aucun envoi.</span></div></div>
-   <div className="capture-instructions"><p className="eyebrow">UNE CONSIGNE À LA FOIS · 0{index+1}</p><h2 ref={headingRef} tabIndex={-1}>{guide.title}</h2><p>{guide.hint}</p><details className="capture-tips"><summary>Conseils pour une photo nette</summary><ul>{guide.tips.map(tip=><li key={tip}><Check/>{tip}</li>)}</ul></details>
+   </div></div>
+   <div className="capture-instructions"><h2 ref={headingRef} tabIndex={-1}>{guide.title}</h2><p>{guide.hint}</p>
     <div className="capture-controls">
      {live?<><button className="btn" type="button" data-capture-shutter disabled={busy||!videoReady} onClick={()=>{if(videoRef.current)void ingest(videoRef.current)}}><Camera/>{busy?"Préparation…":"Prendre la photo"}</button><button className="capture-secondary" type="button" disabled={busy} onClick={stopCamera}>Fermer la caméra</button></>:<><button className="btn" type="button" data-capture-camera disabled={busy||cameraPending} onClick={()=>void openCamera()}><Camera/>{cameraPending?"Autorisez la caméra…":photo?"Reprendre la photo":"Ouvrir la caméra"}</button><button className="capture-secondary" type="button" disabled={busy} onClick={()=>fileRef.current?.click()}>{photo?"Remplacer depuis la galerie":"Choisir dans ma galerie"} <Arrow/></button></>}
      {cameraPending&&<button className="capture-text-button" type="button" onClick={stopCamera}>Annuler l’ouverture</button>}
      {error&&<p className="capture-error" role="alert">{error}</p>}
      {error&&!live&&<button className="capture-text-button" type="button" onClick={()=>nativeRef.current?.click()}>Utiliser l’appareil photo du téléphone</button>}
-     <p className="capture-status" role="status" aria-live="polite">{busy?"Préparation de votre photo…":photo?"Photo ajoutée. Vous pouvez continuer ou la remplacer.":"JPG, PNG, WebP · 12 Mo maximum par photo."}</p>
+     <p className="capture-status" role="status" aria-live="polite">{busy?"Préparation de votre photo…":""}</p>
      {photo&&!live&&<button className="capture-remove" type="button" disabled={busy} onClick={()=>replace(index,null)}>Supprimer cette photo</button>}
     </div>
     <div className="capture-next"><button className="btn" type="button" disabled={busy||live||cameraPending||(index<2?!photo:!ready)} onClick={()=>index<2?move(index+1):showReview()}>{index===2?"Vérifier mes photos":"Continuer"} <Arrow/></button>{index===2&&ready&&!live&&<button className="capture-text-button" type="button" disabled={busy} onClick={showReview}>Passer le profil</button>}</div>
@@ -111,7 +111,6 @@ export function PhotoCapture(){
   </div>}
   <input ref={fileRef} data-photo-file type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/heic,image/heif" hidden onChange={event=>{void ingest(event.target.files?.[0]);event.target.value=""}}/>
   <input ref={nativeRef} data-photo-native type="file" accept="image/*" capture="user" hidden onChange={event=>{void ingest(event.target.files?.[0]);event.target.value=""}}/>
-  <div className="capture-bottom"><span><Lock/>Vous gardez le choix, à chaque étape.</span><Link href="/rendez-vous/" onClick={()=>{stopCamera();clear()}}>Continuer sans photos <Arrow/></Link></div>
-  <p className="capture-session-note">Cette démonstration conserve les photos uniquement dans la mémoire de votre navigateur, pendant votre navigation sur le site. Elles sont effacées si vous rechargez ou fermez la page. Aucun fichier n’est transmis à la clinique ni à une IA.</p>
+  <div className="capture-bottom"><Link href="/rendez-vous/" onClick={()=>{stopCamera();clear()}}>Continuer sans photos <Arrow/></Link></div>
  </section>;
 }

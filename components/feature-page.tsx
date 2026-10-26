@@ -4,7 +4,6 @@ import {features,ReservedFeature,type FeatureKind} from "./reserved-feature";
 import {PhotoSessionSummary} from "./photo-session";
 
 const content={
- preview:{eyebrow:"SE PROJETER, SANS SE PRÉCIPITER.",title:"Et si vous imaginiez",accent:"votre sourire ?",intro:"Un espace pour mettre des images sur vos envies, puis en parler avec votre dentiste.",steps:["Votre envie","Votre aperçu indicatif","Votre conversation"],note:"L’aperçu sera illustratif. Il ne constituera ni un diagnostic ni une prédiction du résultat d’un traitement."},
  photos:{eyebrow:"MONTRER, SI VOUS LE SOUHAITEZ.",title:"Vos photos.",accent:"Un guide à chaque étape.",intro:"Depuis votre téléphone, un parcours visuel pour partager votre sourire à votre rythme.",steps:["Sourire de face","Vue rapprochée","Profil"],note:"Les photos seront facultatives. Cet espace de gabarit ne collecte et ne transmet aucune photo."},
  booking:{eyebrow:"LE PREMIER PAS PEUT ÊTRE SIMPLE.",title:"Une rencontre.",accent:"À votre rythme.",intro:"Un espace pour préparer votre demande, poser vos questions et proposer un créneau d’évaluation.",steps:["Votre projet","Votre créneau souhaité","La confirmation du cabinet"],note:"Un créneau souhaité devra être vérifié et confirmé par la réception. Aucun rendez-vous n’est réservé depuis cet espace de gabarit."},
 };
