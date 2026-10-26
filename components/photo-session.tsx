@@ -1,6 +1,8 @@
 "use client";
 import {createContext,useCallback,useContext,useEffect,useRef,useState,type ReactNode} from "react";
-import Link from "next/link";
+import Link from "./locale-link";
+import {useLocale} from "./locale-provider";
+import {photos as photoDict} from "@/lib/i18n/dict/photos";
 
 export type PreparedPhoto={url:string;width:number;height:number};
 type PhotoSession={photos:(PreparedPhoto|null)[];replace:(index:number,photo:PreparedPhoto|null)=>void;clear:()=>void};
@@ -19,7 +21,7 @@ export function PhotoSessionProvider({children}:{children:ReactNode}){
 }
 export function usePhotoSession(){const value=useContext(Context);if(!value)throw new Error("Photo session provider is missing");return value}
 export function PhotoSessionSummary(){
- const {photos,clear}=usePhotoSession();const count=photos.filter(Boolean).length;
+ const {photos,clear}=usePhotoSession();const t=photoDict[useLocale()];const count=photos.filter(Boolean).length;
  if(!count)return null;
- return <aside className="photo-session-summary" aria-label="Vos photos préparées"><div className="photo-session-miniatures">{photos.map((photo,index)=>photo&&<img key={index} src={photo.url} alt={`Photo préparée : ${["sourire de face","dents de près","profil"][index]}`}/>)}</div><div><strong>{count} photo{count>1?"s":""} préparée{count>1?"s":""} sur cet appareil.</strong><p>Elles restent dans cette session. Aucune photo n’est envoyée à la clinique.</p><Link href="/photos-guidees/">Vérifier mes photos</Link><button type="button" onClick={clear}>Tout effacer</button></div></aside>;
+ return <aside className="photo-session-summary" aria-label={t.summaryAria}><div className="photo-session-miniatures">{photos.map((photo,index)=>photo&&<img key={index} src={photo.url} alt={t.summaryAlt(t.guides[index].label)}/>)}</div><div><strong>{t.summaryCount(count)}</strong><p>{t.summaryNote}</p><Link href="/photos-guidees/">{t.summaryCheck}</Link><button type="button" onClick={clear}>{t.summaryClear}</button></div></aside>;
 }

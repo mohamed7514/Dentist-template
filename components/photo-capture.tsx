@@ -1,15 +1,12 @@
 "use client";
 import {useCallback,useEffect,useRef,useState} from "react";
-import Link from "next/link";
+import Link from "./locale-link";
+import {useLocale} from "./locale-provider";
+import {photos as dict} from "@/lib/i18n/dict/photos";
 import {Arrow} from "./icons";
 import {usePhotoSession,type PreparedPhoto} from "./photo-session";
 import "./photo-flow.css";
 
-const guides=[
- {label:"Sourire de face",short:"De face",title:"Votre sourire, de face.",hint:"Placez votre visage dans le contour et souriez."},
- {label:"Dents de près",short:"De près",title:"Un peu plus près.",hint:"Rapprochez le téléphone : vos dents dans le contour."},
- {label:"Profil",short:"Profil",title:"Un profil, si vous voulez.",hint:"Tournez la tête de côté, visage dans le contour."},
-];
 
 // Drawings on a 300x400 canvas. `outline` is one closed silhouette (the window kept clear in the camera overlay); `lines` are the facial details.
 const shapes=[
@@ -44,32 +41,33 @@ function GuideOverlay({index}:{index:number}){
  </svg></div>;
 }
 
-async function preparePhoto(source:File|HTMLVideoElement,mirror=false):Promise<PreparedPhoto>{
+type Errors=(typeof dict)["fr"]["errors"];
+async function preparePhoto(source:File|HTMLVideoElement,e:Errors,mirror=false):Promise<PreparedPhoto>{
  let originalUrl:string|undefined;
  try{
   let drawable:HTMLImageElement|HTMLVideoElement,sx=0,sy=0,sw:number,sh:number;
   if(source instanceof File){
-   if(!/^image\/(jpeg|png|webp|avif|heic|heif)$/i.test(source.type))throw new Error("Choisissez une photo JPG, PNG, WebP ou un format photo pris en charge par votre navigateur.");
-   if(source.size>12*1024*1024)throw new Error("Cette photo est trop lourde. Choisissez une image de 12 Mo maximum.");
+   if(!/^image\/(jpeg|png|webp|avif|heic|heif)$/i.test(source.type))throw new Error(e.format);
+   if(source.size>12*1024*1024)throw new Error(e.heavy);
    originalUrl=URL.createObjectURL(source);const image=new Image();image.src=originalUrl;
-   try{await image.decode()}catch{throw new Error("Cette photo ne peut pas être lue. Essayez une version JPG ou PNG.")}
+   try{await image.decode()}catch{throw new Error(e.unreadable)}
    drawable=image;sw=image.naturalWidth;sh=image.naturalHeight;
   }else{
    drawable=source;const vw=source.videoWidth,vh=source.videoHeight;
-   if(!vw||!vh)throw new Error("L’image n’est pas encore prête. Réessayez dans un instant.");
+   if(!vw||!vh)throw new Error(e.notReady);
    // Keep exactly what the screen shows: the video is displayed with object-fit: cover.
    const scale=Math.max((source.clientWidth||vw)/vw,(source.clientHeight||vh)/vh);
    sw=(source.clientWidth||vw)/scale;sh=(source.clientHeight||vh)/scale;sx=(vw-sw)/2;sy=(vh-sh)/2;
   }
-  if(!sw||!sh)throw new Error("L’image n’est pas encore prête. Réessayez dans un instant.");
-  if(sw*sh>60000000)throw new Error("Les dimensions de cette image sont trop grandes. Choisissez une photo plus petite.");
+  if(!sw||!sh)throw new Error(e.notReady);
+  if(sw*sh>60000000)throw new Error(e.tooLarge);
   const ratio=Math.min(1,1600/Math.max(sw,sh));
   const canvas=document.createElement("canvas");canvas.width=Math.round(sw*ratio);canvas.height=Math.round(sh*ratio);
-  const context=canvas.getContext("2d");if(!context)throw new Error("Impossible de préparer cette photo sur cet appareil.");
+  const context=canvas.getContext("2d");if(!context)throw new Error(e.device);
   context.fillStyle="#fff";context.fillRect(0,0,canvas.width,canvas.height);
   if(mirror){context.translate(canvas.width,0);context.scale(-1,1)}
   context.drawImage(drawable,sx,sy,sw,sh,0,0,canvas.width,canvas.height);
-  const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(value=>value?resolve(value):reject(new Error("Impossible de préparer cette photo. Réessayez.")),"image/jpeg",.9));
+  const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(value=>value?resolve(value):reject(new Error(e.prepare)),"image/jpeg",.9));
   return {url:URL.createObjectURL(blob),width:canvas.width,height:canvas.height};
  }finally{if(originalUrl)URL.revokeObjectURL(originalUrl)}
 }
@@ -88,6 +86,7 @@ export function GuidedPhotos({photos,replace,clear,onFinish,onSkip,embedded=fals
  const [facing,setFacing]=useState<"user"|"environment">("user"),[shot,setShot]=useState<PreparedPhoto|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState("");
  const streamRef=useRef<MediaStream|null>(null),videoRef=useRef<HTMLVideoElement>(null),fileRef=useRef<HTMLInputElement>(null),nativeRef=useRef<HTMLInputElement>(null),headingRef=useRef<HTMLHeadingElement>(null),shutterRef=useRef<HTMLButtonElement>(null);
  const mounted=useRef(true),cameraEpoch=useRef(0),busyRef=useRef(false),shotRef=useRef<PreparedPhoto|null>(null);
+ const t=dict[useLocale()],guides=t.guides;
  const count=photos.filter(Boolean).length,ready=!!photos[0]&&!!photos[1],guide=guides[index],photo=photos[index];
 
  const dropShot=useCallback(()=>{if(shotRef.current)URL.revokeObjectURL(shotRef.current.url);shotRef.current=null;if(mounted.current)setShot(null)},[]);
@@ -101,7 +100,7 @@ export function GuidedPhotos({photos,replace,clear,onFinish,onSkip,embedded=fals
  useEffect(()=>{
   if(!live)return;
   const video=videoRef.current;
-  if(video&&streamRef.current&&video.srcObject!==streamRef.current){video.srcObject=streamRef.current;video.play().catch(()=>{stopCamera();setError("La caméra ne peut pas démarrer. Choisissez plutôt une photo de votre galerie.")})}
+  if(video&&streamRef.current&&video.srcObject!==streamRef.current){video.srcObject=streamRef.current;video.play().catch(()=>{stopCamera();setError(t.errors.cameraStart)})}
   const onKey=(event:KeyboardEvent)=>{if(event.key==="Escape")stopCamera()};
   document.addEventListener("keydown",onKey);
   const scroll=document.documentElement.style.overflow;document.documentElement.style.overflow="hidden";
@@ -122,27 +121,27 @@ export function GuidedPhotos({photos,replace,clear,onFinish,onSkip,embedded=fals
    setFacing(side);setVideoReady(false);dropShot();
    if(videoRef.current){videoRef.current.srcObject=stream;videoRef.current.play().catch(()=>{})}
    setLive(true);
-  }catch{if(mounted.current&&job===cameraEpoch.current)setError("La caméra n’est pas accessible. Autorisez-la dans votre navigateur ou choisissez une photo de votre galerie.")}
+  }catch{if(mounted.current&&job===cameraEpoch.current)setError(t.errors.cameraDenied)}
   finally{if(mounted.current&&job===cameraEpoch.current)setPending(false)}
  }
  async function capture(){
   const video=videoRef.current;if(!video||busyRef.current)return;
   busyRef.current=true;setBusy(true);setError("");
   try{
-   const prepared=await preparePhoto(video,facing==="user");
+   const prepared=await preparePhoto(video,t.errors,facing==="user");
    if(!mounted.current){URL.revokeObjectURL(prepared.url);return}
    navigator.vibrate?.(12);shotRef.current=prepared;setShot(prepared);
-  }catch(reason){if(mounted.current)setError(reason instanceof Error?reason.message:"Impossible de prendre la photo.")}
+  }catch(reason){if(mounted.current)setError(reason instanceof Error?reason.message:t.errors.capture)}
   finally{busyRef.current=false;if(mounted.current)setBusy(false)}
  }
  async function fromFile(file?:File){
   if(!file||busyRef.current)return;
   busyRef.current=true;setBusy(true);setError("");
   try{
-   const prepared=await preparePhoto(file);
+   const prepared=await preparePhoto(file,t.errors);
    if(!mounted.current){URL.revokeObjectURL(prepared.url);return}
    if(live){dropShot();shotRef.current=prepared;setShot(prepared)}else replace(index,prepared);
-  }catch(reason){if(mounted.current)setError(reason instanceof Error?reason.message:"Impossible de lire cette photo.")}
+  }catch(reason){if(mounted.current)setError(reason instanceof Error?reason.message:t.errors.read)}
   finally{busyRef.current=false;if(mounted.current)setBusy(false)}
  }
  function acceptShot(){
@@ -152,50 +151,50 @@ export function GuidedPhotos({photos,replace,clear,onFinish,onSkip,embedded=fals
  }
  const next=()=>index<2?move(index+1):showReview();
 
- return <section className={"pc"+(embedded?" pc-embedded":" wrap")} aria-label="Prise de photos guidée">
-  <div className="pc-steps" role="group" aria-label="Angles de prise de vue">{guides.map((item,i)=><button type="button" key={item.label} onClick={()=>move(i)} aria-current={!review&&index===i?"step":undefined} className={photos[i]?"has-photo":""}><span>{photos[i]?<Check/>:i+1}</span>{item.short}</button>)}</div>
+ return <section className={"pc"+(embedded?" pc-embedded":" wrap")} aria-label={t.section}>
+  <div className="pc-steps" role="group" aria-label={t.stepsAria}>{guides.map((item,i)=><button type="button" key={item.label} onClick={()=>move(i)} aria-current={!review&&index===i?"step":undefined} className={photos[i]?"has-photo":""}><span>{photos[i]?<Check/>:i+1}</span>{item.short}</button>)}</div>
   {review?<div className="pc-review">
-   <h2 ref={headingRef} tabIndex={-1}>Vos photos.</h2>
+   <h2 ref={headingRef} tabIndex={-1}>{t.reviewTitle}</h2>
    <div className="pc-review-grid">{guides.map((item,i)=><div key={item.label}>
-    <button type="button" className="pc-thumb" onClick={()=>move(i)} aria-label={photos[i]?`Reprendre : ${item.label}`:`Ajouter : ${item.label}`}>{photos[i]?<img src={photos[i]!.url} alt={`Votre photo : ${item.label}`}/>:<><PhotoGuide index={i}/><b>+ Ajouter</b></>}</button>
-    <p>{item.short}{photos[i]&&<button type="button" className="pc-remove" aria-label={`Supprimer la photo ${item.label}`} onClick={()=>replace(i,null)}>Retirer</button>}</p>
+    <button type="button" className="pc-thumb" onClick={()=>move(i)} aria-label={photos[i]?t.retake(item.label):t.add(item.label)}>{photos[i]?<img src={photos[i]!.url} alt={t.yourPhoto(item.label)}/>:<><PhotoGuide index={i}/><b>{t.addShort}</b></>}</button>
+    <p>{item.short}{photos[i]&&<button type="button" className="pc-remove" aria-label={t.removeAria(item.label)} onClick={()=>replace(i,null)}>{t.remove}</button>}</p>
    </div>)}</div>
-   <div className="pc-actions">{onFinish?<button type="button" className="pc-primary" onClick={onFinish}>Continuer <Arrow/></button>:<Link className="pc-primary" href="/rendez-vous/">Préparer mon rendez-vous <Arrow/></Link>}<button type="button" className="pc-link" onClick={()=>{clear();move(0)}}>Tout effacer</button></div>
+   <div className="pc-actions">{onFinish?<button type="button" className="pc-primary" onClick={onFinish}>{t.continue} <Arrow/></button>:<Link className="pc-primary" href="/rendez-vous/">{t.prepareBooking} <Arrow/></Link>}<button type="button" className="pc-link" onClick={()=>{clear();move(0)}}>{t.clearAll}</button></div>
   </div>:<div className="pc-step">
-   <div className="pc-frame">{photo?<img src={photo.url} alt={`Votre photo : ${guide.label}`}/>:<PhotoGuide index={index}/>}{index===2&&!photo&&<span className="pc-tag">Facultatif</span>}</div>
+   <div className="pc-frame">{photo?<img src={photo.url} alt={t.yourPhoto(guide.label)}/>:<PhotoGuide index={index}/>}{index===2&&!photo&&<span className="pc-tag">{t.optionalTag}</span>}</div>
    <div className="pc-side">
     <div className="pc-info"><h2 ref={headingRef} tabIndex={-1}>{guide.title}</h2><p>{guide.hint}</p></div>
     <div className="pc-actions">
      {error&&<p className="pc-error" role="alert">{error}</p>}
      {photo?<>
-      <button type="button" className="pc-primary" onClick={next}>{index===2?"Vérifier mes photos":"Continuer"} <Arrow/></button>
-      <div className="pc-row"><button type="button" className="pc-link" data-capture-camera disabled={busy||pending} onClick={()=>void startCamera()}>Reprendre</button><button type="button" className="pc-link" disabled={busy} onClick={()=>fileRef.current?.click()}>Autre photo</button></div>
+      <button type="button" className="pc-primary" onClick={next}>{index===2?t.reviewPhotos:t.continue} <Arrow/></button>
+      <div className="pc-row"><button type="button" className="pc-link" data-capture-camera disabled={busy||pending} onClick={()=>void startCamera()}>{t.retakeShort}</button><button type="button" className="pc-link" disabled={busy} onClick={()=>fileRef.current?.click()}>{t.otherPhoto}</button></div>
      </>:<>
-      <button type="button" className="pc-primary" data-capture-camera disabled={busy||pending} onClick={()=>void startCamera()}><Camera/>{pending?"Autorisez la caméra…":"Ouvrir la caméra"}</button>
-      <div className="pc-row"><button type="button" className="pc-link" disabled={busy} onClick={()=>fileRef.current?.click()}>{busy?"Préparation…":"Choisir dans la galerie"}</button>{index===2&&count>0&&<button type="button" className="pc-link" onClick={showReview}>Passer</button>}</div>
+      <button type="button" className="pc-primary" data-capture-camera disabled={busy||pending} onClick={()=>void startCamera()}><Camera/>{pending?t.allowCamera:t.openCamera}</button>
+      <div className="pc-row"><button type="button" className="pc-link" disabled={busy} onClick={()=>fileRef.current?.click()}>{busy?t.preparing:t.chooseGallery}</button>{index===2&&count>0&&<button type="button" className="pc-link" onClick={showReview}>{t.skipOne}</button>}</div>
      </>}
-     {onSkip?<button type="button" className="pc-skip" onClick={()=>{stopCamera();onSkip()}}>Passer cette étape <Arrow/></button>:<Link className="pc-skip" href="/rendez-vous/" onClick={()=>{stopCamera();clear()}}>Passer cette étape <Arrow/></Link>}
+     {onSkip?<button type="button" className="pc-skip" onClick={()=>{stopCamera();onSkip()}}>{t.skipStep} <Arrow/></button>:<Link className="pc-skip" href="/rendez-vous/" onClick={()=>{stopCamera();clear()}}>{t.skipStep} <Arrow/></Link>}
     </div>
    </div>
   </div>}
-  {live&&<div className="pc-cam" role="dialog" aria-modal="true" aria-label={`Caméra : ${guide.label}`}>
+  {live&&<div className="pc-cam" role="dialog" aria-modal="true" aria-label={t.cameraDialog(guide.label)}>
    <video ref={videoRef} className={facing==="user"?"is-mirror":undefined} autoPlay muted playsInline onCanPlay={()=>setVideoReady(true)}/>
-   {shot?<img className="pc-cam-shot" src={shot.url} alt={`Aperçu : ${guide.label}`}/>:<GuideOverlay index={index}/>}
+   {shot?<img className="pc-cam-shot" src={shot.url} alt={t.preview(guide.label)}/>:<GuideOverlay index={index}/>}
    <div className="pc-cam-top">
-    <button type="button" className="pc-round" aria-label="Fermer la caméra" onClick={stopCamera}>×</button>
-    <div className="pc-cam-title"><strong>{guide.label}</strong><span>{index+1} / 3{index===2?" · facultatif":""}</span></div>
-    {index===2&&!shot&&count>0?<button type="button" className="pc-cam-skip" onClick={showReview}>Passer</button>:<i className="pc-round-spacer"/>}
+    <button type="button" className="pc-round" aria-label={t.closeCamera} onClick={stopCamera}>×</button>
+    <div className="pc-cam-title"><strong>{guide.label}</strong><span>{index+1} / 3{index===2?t.optionalSuffix:""}</span></div>
+    {index===2&&!shot&&count>0?<button type="button" className="pc-cam-skip" onClick={showReview}>{t.skipOne}</button>:<i className="pc-round-spacer"/>}
    </div>
    {!shot&&<p className="pc-cam-hint">{guide.hint}</p>}
    {error&&<p className="pc-cam-error" role="alert">{error}</p>}
    <div className="pc-cam-bottom">
     {shot?<>
-     <button type="button" className="pc-cam-ghost" onClick={dropShot}>Refaire</button>
-     <button type="button" className="pc-cam-use" onClick={acceptShot}>{index===2?"Terminer":"Utiliser"} <Arrow/></button>
+     <button type="button" className="pc-cam-ghost" onClick={dropShot}>{t.redo}</button>
+     <button type="button" className="pc-cam-use" onClick={acceptShot}>{index===2?t.finish:t.use} <Arrow/></button>
     </>:<>
-     <button type="button" className="pc-round" aria-label="Choisir dans la galerie" disabled={busy} onClick={()=>fileRef.current?.click()}><Gallery/></button>
-     <button ref={shutterRef} type="button" className="pc-shutter" data-capture-shutter aria-label="Prendre la photo" disabled={busy||!videoReady} onClick={()=>void capture()}/>
-     <button type="button" className="pc-round" aria-label="Changer de caméra" disabled={busy||pending} onClick={()=>void startCamera(facing==="user"?"environment":"user")}><Flip/></button>
+     <button type="button" className="pc-round" aria-label={t.galleryAria} disabled={busy} onClick={()=>fileRef.current?.click()}><Gallery/></button>
+     <button ref={shutterRef} type="button" className="pc-shutter" data-capture-shutter aria-label={t.shutterAria} disabled={busy||!videoReady} onClick={()=>void capture()}/>
+     <button type="button" className="pc-round" aria-label={t.flipAria} disabled={busy||pending} onClick={()=>void startCamera(facing==="user"?"environment":"user")}><Flip/></button>
     </>}
    </div>
   </div>}

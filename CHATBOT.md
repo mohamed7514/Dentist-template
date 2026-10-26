@@ -37,3 +37,8 @@ Copier `.env.example` en `.env.local`, renseigner `OPENAI_API_KEY`, puis `npm ru
 `node tools/chat-conversion-check.mjs` (boutons, réponses rapides, consentement, barre de conversion, bulle) puis `node tools/chat-check.mjs` depuis `C:/Dev/dentist`, export servi sur le port 3090 : parcours guidé, liens, urgence, clavier, tailles desktop/mobile et mode IA simulé avec accord, historique, erreur et effacement.
 
 Documentation : [Responses API](https://developers.openai.com/api/docs/guides/text), [sorties structurées](https://developers.openai.com/api/docs/guides/structured-outputs), [modèle](https://developers.openai.com/api/docs/models/gpt-4.1-mini).
+
+
+## Langue de l’assistant
+
+Le navigateur envoie `locale` (`fr` ou `en`) avec chaque message. Le serveur choisit alors les instructions du modèle, les libellés de retrait des coordonnées et la réponse d’urgence dans cette langue ; une valeur inconnue retombe sur le français. Les mots-clés de routage (soins, urgence, rendez-vous) couvrent les deux langues. Tests : `server/i18n.test.mjs`.

@@ -76,3 +76,14 @@ Captures du gabarit dans `../preview/template/`.
 Le bouton « Urgence dentaire » ouvre un panneau accessible, disponible sur toutes les pages. Sur mobile, il partage la barre fixe avec « Rendez-vous ». Configurer les coordonnées confirmées dans `lib/emergency-contact.ts` ; elles sont volontairement vides pour ne pas appeler le cabinet dont l’adresse sert d’exemple. Aucun formulaire ni rappel automatique n’est ajouté. Le panneau propose les repères 811/911 et ne réalise aucun diagnostic. Vérification ciblée : `node tools/emergency-check.mjs` depuis le dossier parent.
 
 Les images précédentes sont réutilisées sans génération supplémentaire. Provenance et prompts : `visual-prompts.txt` et `comparison-prompt.txt`. Le lien de l’Association dentaire canadienne est conservé sur la page implants.
+
+
+## Langues (FR / EN)
+
+- Le français reste à la racine (`/implants/`) ; l’anglais vit sous `/en/` avec des adresses traduites (`/en/dental-bridge/`, `/en/book/`, `/en/guided-photos/`…). Le sélecteur FR | EN est dans l’en-tête et le menu mobile ; le choix est mémorisé (cookie `NEXT_LOCALE`) pour la page d’accueil.
+- Les pages vivent dans `app/[locale]/` ; `proxy.ts` réécrit les adresses publiques vers `/fr/…` ou `/en/…` et redirige les anciennes formes. Les correspondances d’adresses sont dans `lib/i18n/config.ts`.
+- Tous les textes sont dans `lib/i18n/dict/*.ts` : chaque fichier déclare le français puis l’anglais avec `define(fr, en)`, et le compilateur refuse une clé manquante dans l’une des deux langues. `*texte*` met en italique et `
+` fait un retour à la ligne (`rich()`).
+- Les liens utilisent `components/locale-link.tsx` avec le chemin canonique français (`/rendez-vous/`) ; il est traduit automatiquement.
+- Les réponses du formulaire de rendez-vous sont gardées sous forme de clés (pas de texte) : changer de langue en cours de route garde le choix.
+- Pour ajouter une langue : l’ajouter à `locales` dans `lib/i18n/config.ts`, une entrée dans chaque `define` et les adresses traduites dans `proxy.ts`/`config.ts`.

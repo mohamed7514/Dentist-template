@@ -24,14 +24,14 @@ const plain=text=>String(text).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCa
 export function needFromText(text){
  const q=plain(text);
  if(/\bponts?\b|\bbridges?\b/.test(q))return "pont";
- if(/plusieurs (dents|implants)|dents manquantes|toutes mes dents/.test(q))return "multiple";
- if(/implant|dent (manquant|enlev|arrach|perdu|tomb|absent|extrait|vide|creuse|qui manque)|(perdu|enleve|arrache|extrait|tombe)e? (une|ma|la|mes|des) dents?|il me manque|me manque (une|des) dent|extraction|un trou|remplacer une dent/.test(q))return "dent";
- if(/blanch|eclat|jaune|plus lumineux|couleur de mes dents/.test(q))return "eclat";
- if(/align|croche|orthodon|gouttiere|dents de travers/.test(q))return "alignement";
+ if(/plusieurs (dents|implants)|dents manquantes|toutes mes dents|(several|multiple|many) (teeth|implants)|missing teeth|all my teeth/.test(q))return "multiple";
+ if(/implant|dent (manquant|enlev|arrach|perdu|tomb|absent|extrait|vide|creuse|qui manque)|(perdu|enleve|arrache|extrait|tombe)e? (une|ma|la|mes|des) dents?|il me manque|me manque (une|des) dent|extraction|un trou|remplacer une dent|missing tooth|lost a tooth|lost my tooth|tooth (fell|removed|pulled|extracted)|knocked out|replace a tooth|gap in my/.test(q))return "dent";
+ if(/blanch|eclat|jaune|plus lumineux|couleur de mes dents|whiten|bleach|yellow|stain|brighter|colou?r of my teeth/.test(q))return "eclat";
+ if(/align|croche|orthodon|gouttiere|dents de travers|crooked|straighten|braces|aligner/.test(q))return "alignement";
  return "inconnu";
 }
-export const accepts=text=>/^(oui|ok|d.?accord|allons.?y|volontiers|avec plaisir|pourquoi pas|c.?est parti|je veux bien)(\b|$)/.test(plain(text).trim());
-export const wantsBooking=text=>/rendez.?vous|reserver|consultation|evaluation|disponibilit|je veux commencer|prendre un rdv/.test(plain(text));
+export const accepts=text=>/^(oui|ok|d.?accord|allons.?y|volontiers|avec plaisir|pourquoi pas|c.?est parti|je veux bien|yes|yeah|yep|sure|okay|let.?s go|gladly|why not|go ahead|please do)(\b|$)/.test(plain(text).trim());
+export const wantsBooking=text=>/rendez.?vous|reserver|consultation|evaluation|disponibilit|je veux commencer|prendre un rdv|appointment|book( |$)|booking|availability|get started|schedule|i want to start/.test(plain(text));
 export const servicePage={dent:"implants",multiple:"implants",alignement:"alignement",pont:"pont"};
 export const bookingAction=state=>"start_"+(state.need==="pont"?"dent":known(state.need)?state.need:"avis");
 // Route the turn. `turns` already includes the current user message.
@@ -47,7 +47,10 @@ export function route(previous,{text,modelNeed}){
  if(first){const page=servicePage[state.need];if(page)actions.push(page);state.linked=true}
  return {state,actions:actions.slice(0,2)};
 }
-export function needDirective(state){
+export function needDirective(state,locale="fr"){
+ if(locale==="en")return known(state.need)
+  ?`The visitor is interested in: ${state.need} (dent: one missing tooth; multiple: several teeth; eclat: whitening; alignement: alignment; pont: fixed bridge). Answer their question about this treatment precisely. Ask a question only if it is useful.`
+  :"The need is not clear yet. If the person describes a problem, name the most relevant treatment among implants, dental bridge, alignment, explain in one sentence why an evaluation helps, and offer to continue. Otherwise ask ONE question to understand what bothers them.";
  return known(state.need)
   ?`Le visiteur s’intéresse à : ${state.need}. Réponds précisément à sa question sur ce soin. Pose une question seulement si elle est utile.`
   :"Le besoin n’est pas encore clair. Si la personne décrit un problème, nomme le soin le plus pertinent parmi implants, pont dentaire, alignement, explique en une phrase pourquoi une évaluation aide, et propose de continuer. Sinon pose UNE question pour comprendre ce qui la gêne.";

@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import Link from "./locale-link";
+import { useLocale } from "./locale-provider";
+import { cinematic } from "@/lib/i18n/dict/pages";
 import { useEffect, useRef, useState } from "react";
 import { Arrow } from "./icons";
 import "./cinematic-treatment-hero.css";
@@ -22,6 +24,7 @@ type Props = {
 };
 
 export function CinematicTreatmentHero({ id, headingId, service, eyebrow, heading, accent, intro, videoSrc, posterSrc, description, playbackLabel, note }: Props) {
+  const t = cinematic[useLocale()];
   const root = useRef<HTMLElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const paused = useRef(false);
@@ -83,15 +86,15 @@ export function CinematicTreatmentHero({ id, headingId, service, eyebrow, headin
         <source src={videoSrc} type="video/mp4" />
       </video>
     </div>
-    <Link className="treatment-cinematic-breadcrumb" href="/soins/">← Nos soins <span aria-hidden="true">/</span> {service}</Link>
-    {!reduced && <button type="button" className="treatment-cinematic-playback" aria-label={blocked ? `Lire l’animation ${playbackLabel}` : isPaused ? `Reprendre l’animation ${playbackLabel}` : `Mettre l’animation ${playbackLabel} en pause`} onClick={toggle}>
-      <svg viewBox="0 0 12 12" fill="currentColor" width="12" height="12" aria-hidden="true">{isPaused || blocked ? <path d="M3 1.5 10 6l-7 4.5z" /> : <path d="M2 1h3v10H2zm5 0h3v10H7z" />}</svg>{blocked ? "Lire" : isPaused ? "Reprendre" : "Pause"}
+    <Link className="treatment-cinematic-breadcrumb" href="/soins/">{t.backToTreatments} <span aria-hidden="true">/</span> {service}</Link>
+    {!reduced && <button type="button" className="treatment-cinematic-playback" aria-label={blocked ? t.playAria(playbackLabel) : isPaused ? t.resumeAria(playbackLabel) : t.pauseAria(playbackLabel)} onClick={toggle}>
+      <svg viewBox="0 0 12 12" fill="currentColor" width="12" height="12" aria-hidden="true">{isPaused || blocked ? <path d="M3 1.5 10 6l-7 4.5z" /> : <path d="M2 1h3v10H2zm5 0h3v10H7z" />}</svg>{blocked ? t.play : isPaused ? t.resume : t.pause}
     </button>}
     <div className="treatment-cinematic-copy">
       <p className="treatment-cinematic-eyebrow"><span aria-hidden="true" />{eyebrow}</p>
       <h1 id={headingId}>{heading}<br /><em>{accent}</em></h1>
       <p className="treatment-cinematic-intro">{intro.split("\n").map((line, index) => <span key={line}>{index > 0 && <br />}{line}</span>)}</p>
-      <Link href="/rendez-vous/" className="btn treatment-cinematic-cta">Préparer mon évaluation <Arrow /></Link>
+      <Link href="/rendez-vous/" className="btn treatment-cinematic-cta">{t.prepare} <Arrow /></Link>
     </div>
     <p className="treatment-cinematic-note">{note}</p>
   </section>;

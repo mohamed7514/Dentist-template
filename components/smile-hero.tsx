@@ -3,15 +3,13 @@
 import Image from "next/image";
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
+import { useLocale } from "./locale-provider";
+import { smileHero } from "@/lib/i18n/dict/sections";
+import { rich } from "@/lib/i18n/rich";
 import "./smile-hero.css";
 
-const stages = [
-  { number: "01", label: "Votre point de départ", title: "Chaque sourire a son histoire.", text: "Une dent manquante, une couleur qui vous gêne. Tout commence par vous." },
-  { number: "02", label: "Les possibilités", title: "Et si vous imaginiez la suite ?", text: "Retrouver de l’éclat, de l’harmonie, un sourire plus complet." },
-  { number: "03", label: "Un nouveau regard", title: "Le plaisir de sourire. À nouveau.", text: "Vos envies méritent une conversation. À votre rythme, avec votre dentiste." },
-];
-
 export function SmileHero() {
+  const t = smileHero[useLocale()];
   const root = useRef<HTMLElement>(null);
   useLayoutEffect(() => {
     const media = gsap.matchMedia();
@@ -109,7 +107,7 @@ export function SmileHero() {
   return (
     <section ref={root} className="smile-hero" id="accueil" aria-labelledby="smile-heading" data-stage="0">
       <div className="smile-scene">
-        <div className="smile-frame" role="img" aria-label="Animation illustrative : un sourire avec des dents tachées et manquantes évolue automatiquement vers un sourire complet et naturel.">
+        <div className="smile-frame" role="img" aria-label={t.frameAria}>
           <div className="smile-photograph" aria-hidden="true">
             <Image className="smile-final" src="/assets/smile-final.webp" alt="" width={1536} height={1024} priority sizes="100vw" />
             <Image className="smile-before" src="/assets/smile-before.webp" alt="" width={1536} height={1024} priority sizes="100vw" />
@@ -130,11 +128,11 @@ export function SmileHero() {
 
         <div className="smile-story">
         <div className="smile-heading">
-          <h1 id="smile-heading">Le plaisir de sourire,<br /><em>à nouveau.</em></h1>
+          <h1 id="smile-heading">{rich(t.heading)}</h1>
         </div>
 
           <div className="smile-captions" aria-hidden="true">
-            {stages.map((stage, index) => <div className="smile-caption" key={stage.number} data-caption={index}><h2>{stage.title}</h2><p>{stage.text}</p></div>)}
+            {t.stages.map((stage, index) => <div className="smile-caption" key={index} data-caption={index}><h2>{stage.title}</h2><p>{stage.text}</p></div>)}
           </div>
         </div>
       </div>

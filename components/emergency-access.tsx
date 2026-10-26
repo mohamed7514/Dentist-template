@@ -2,7 +2,9 @@
 
 import {useEffect, useRef, useState} from "react";
 import {usePathname} from "next/navigation";
-import Link from "next/link";
+import Link from "./locale-link";
+import {useLocale} from "./locale-provider";
+import {emergency} from "@/lib/i18n/dict/sections";
 import {Arrow} from "./icons";
 import {emergencyContact} from "@/lib/emergency-contact";
 import "./emergency-access.css";
@@ -12,6 +14,7 @@ function Close(){return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
 const phoneHref=(phone:string)=>`tel:${phone.replace(/[^+\d]/g, "")}`;
 
 export function EmergencyAccess(){
+  const t=emergency[useLocale()];
   const dialog=useRef<HTMLDialogElement>(null);
   const [open,setOpen]=useState(false);
   const pathname=usePathname();
@@ -37,8 +40,8 @@ export function EmergencyAccess(){
   const triggerProps={type:"button" as const,onClick:show,"aria-haspopup":"dialog" as const,"aria-controls":"emergency-dialog","aria-expanded":open};
 
   return <>
-    <button {...triggerProps} className="emergency-float"><span className="emergency-float-icon"><Phone/></span><span>Urgence dentaire</span><Arrow/></button>
-    <nav className="patient-action-bar" aria-label="Contact rapide"><button {...triggerProps}><Phone/><span>Urgence dentaire</span></button><Link href="/rendez-vous/">Rendez-vous <Arrow/></Link></nav>
+    <button {...triggerProps} className="emergency-float"><span className="emergency-float-icon"><Phone/></span><span>{t.label}</span><Arrow/></button>
+    <nav className="patient-action-bar" aria-label={t.quickContact}><button {...triggerProps}><Phone/><span>{t.label}</span></button><Link href="/rendez-vous/">{t.appointment} <Arrow/></Link></nav>
     <dialog ref={dialog} id="emergency-dialog" className="emergency-dialog" aria-labelledby="emergency-title" onClose={()=>setOpen(false)} onKeyDown={event=>{
       if(event.key!=="Tab")return;
       const controls=event.currentTarget.querySelectorAll<HTMLElement>('a[href],button:not([disabled])');
@@ -51,8 +54,8 @@ export function EmergencyAccess(){
       if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)close();
     }}>
       <div className="emergency-panel">
-        <div className="emergency-panel-top"><span><Phone/> URGENCE DENTAIRE</span><button type="button" className="emergency-close" aria-label="Fermer" onClick={close} autoFocus><Close/></button></div>
-        <button className="emergency-call" type="button" disabled><Phone/><span>Appeler la clinique<small>Numéro à renseigner</small></span><Arrow/></button>
+        <div className="emergency-panel-top"><span><Phone/> {t.labelCaps}</span><button type="button" className="emergency-close" aria-label={t.close} onClick={close} autoFocus><Close/></button></div>
+        <button className="emergency-call" type="button" disabled><Phone/><span>{t.call}<small>{t.phoneToFill}</small></span><Arrow/></button>
       </div>
     </dialog>
   </>;

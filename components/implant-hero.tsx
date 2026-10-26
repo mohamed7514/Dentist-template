@@ -1,18 +1,21 @@
 import { CinematicTreatmentHero } from "./cinematic-treatment-hero";
+import { implants } from "@/lib/i18n/dict/pages";
+import type { Locale } from "@/lib/i18n/config";
 
-export function ImplantHero() {
+export function ImplantHero({ locale }: { locale: Locale }) {
+  const t = implants[locale].hero;
   return <CinematicTreatmentHero
     id="implant-hero"
     headingId="implant-heading"
-    service="Implants dentaires"
-    eyebrow="IMPLANTS DENTAIRES"
-    heading="Une dent à remplacer."
-    accent="Une suite à imaginer."
-    intro={"Un nouvel appui pour votre sourire.\nCommençons par en parler, à votre rythme."}
+    service={t.service}
+    eyebrow={t.eyebrow}
+    heading={t.heading}
+    accent={t.accent}
+    intro={t.intro}
     videoSrc="/assets/implant-hero/assembly-v2.mp4"
     posterSrc="/assets/implant-hero/poster-v2.webp"
-    description="Animation illustrative en coupe : un implant descend dans l’os de la mâchoire, puis le pilier et la couronne viennent s’assembler."
-    playbackLabel="de l’implant"
-    note="Reconstitution 3D illustrative. Le traitement est adapté à chaque patient."
+    description={t.description}
+    playbackLabel={t.playbackLabel}
+    note={t.note}
   />;
 }

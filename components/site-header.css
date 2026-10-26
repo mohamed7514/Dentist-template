@@ -11,3 +11,14 @@
  .mobile-menu-on-hero a,.mobile-menu-on-hero button{border-color:rgba(255,250,243,.16)}
 }
 @media(prefers-reduced-motion:reduce){.header.header-overlay{transition:none}}
+
+/* Language switcher (FR | EN) */
+.language-switcher{display:inline-flex;align-items:center;border:1px solid #c4b194;border-radius:999px;overflow:hidden;font-size:12px;font-weight:600;letter-spacing:.04em}
+.language-switcher a{display:grid;place-items:center;min-width:38px;min-height:36px;padding:0 10px;color:#665139;background:transparent}
+.language-switcher a[aria-current="true"]{background:#282826;color:#fffaf3}
+.header-on-hero .language-switcher{border-color:#ffffff80}
+.header-on-hero .language-switcher a{color:#fff}
+.header-on-hero .language-switcher a[aria-current="true"]{background:#fff;color:#282826}
+.language-switcher-mobile{margin:18px 0 0;align-self:flex-start}
+.booking-header-end{display:flex;align-items:center;gap:16px}
+@media(max-width:700px){.header-end{gap:10px}.header-end>.language-switcher a{min-width:34px;min-height:34px;padding:0 8px}}
